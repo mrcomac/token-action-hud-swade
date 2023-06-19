@@ -1,0 +1,29 @@
+.tah-info1,
+.tah-info2,
+.tah-info3 {
+	font-size: smaller;
+}
+
+.tah-info1 {
+	text-shadow: 0 0 1px rgba(2, 248, 14, 0.95),
+		1px 1px 1px rgba(52, 52, 52, 1),
+		1px 1px 1px rgba(52, 52, 52, 1),
+		1px 1px 1px rgba(52, 52, 52, 1),
+		1px 1px 1px rgba(52, 52, 52, 1);
+}
+
+.tah-info2 {
+	text-shadow: 0 0 1px rgba(240, 2, 248, 0.95),
+		1px 1px 1px rgba(52, 52, 52, 1),
+		1px 1px 1px rgba(52, 52, 52, 1),
+		1px 1px 1px rgba(52, 52, 52, 1),
+		1px 1px 1px rgba(52, 52, 52, 1);
+}
+
+.tah-info3 {
+	text-shadow: 0 0 1px rgba(2, 240, 248, 0.95),
+		1px 1px 1px rgba(52, 52, 52, 1),
+		1px 1px 1px rgba(52, 52, 52, 1),
+		1px 1px 1px rgba(52, 52, 52, 1),
+		1px 1px 1px rgba(52, 52, 52, 1);
+}
