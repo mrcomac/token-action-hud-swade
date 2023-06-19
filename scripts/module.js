@@ -31,6 +31,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
         _getItems(parent,itemtype) {
             let items = []
             let items_favorities = []
+
             let item_list = this.actor.items.filter(i => i.type === itemtype)
             item_list.forEach(el => {
                 let element = {
@@ -45,7 +46,6 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     items.push(element)
                 }
             })
-
             this.addActions(items, parent)
             this.addActions(items_favorities, { id: parent.id+'favorite', type: parent.type })
         }
@@ -57,7 +57,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     id: element.id,
                     name: element.name,
                     description: element.system.description,
-                    encodedValue: ['skills',element.name].join(this.delimiter)
+                    encodedValue: ['skills',element.id].join(this.delimiter)
                 }
                 
             });
@@ -113,8 +113,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.actor.rollAttribute(actionId.toLowerCase());
                     break;
                 case "skills":
-                    
-                    this.actor.rollSkill(actionId.toLowerCase());
+                    this.actor.rollSkill(actionId);
                     break;
                 case "powers":
                 case "weapons":
