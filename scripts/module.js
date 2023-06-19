@@ -100,7 +100,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             }
             const dieMod = mod > 0 ? `+${mod}` : `${mod}`;
             return `${result}${dieMod}`;
-		}
+        }
 
     }
 
