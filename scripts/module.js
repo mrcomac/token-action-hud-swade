@@ -1,4 +1,4 @@
-import { ATTRIBUTE_ID } from './constants.js'
+import { ATTRIBUTE_ID, IMG_DICE } from './constants.js'
 
 export let SavageActionHandler = null
 export let SavageRollHandler = null
@@ -36,15 +36,17 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             item_list.forEach(el => {
                 let element = {
                     id: el.id,
-                    name: el.name,
                     img: el.img,
+                    name: el.name,
                     description: el.system.description,
-                    encodedValue: [parent.id,el.id].join(this.delimiter),
+                    encodedValue: [parent.id,el.id].join(this.delimiter)
                 }
                 if (["power", "weapon"].includes(el.type) && el.system.damage) {
                     element.info1 = { text: el.system.damage }
                 } else if (el.system.die) {
                     element.info1 = { text: SavageActionHandler._buildDieString(el.system.die) }
+                } else if(el.type == 'consumable') {
+                    element.info1 = {text: el.system.charges.value+"/"+el.system.charges.max }
                 }
                 if(el.system.favorite == true) {
                     items_favorities.push(element)
@@ -79,18 +81,39 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 'SWADE.AttrSpr', 
                 'SWADE.AttrStr', 
                 'SWADE.AttrVig' ].map( key => {
+                    let die = ''
+                    switch(key) {
+                        case 'SWADE.AttrAgi':
+                            die = this.actor.system.attributes.agility.die
+                        break
+                        case 'SWADE.AttrSma':
+                            die = this.actor.system.attributes.smarts.die
+                        break
+                        case 'SWADE.AttrSpr':
+                            die = this.actor.system.attributes.spirit.die
+                        break
+                        case 'SWADE.AttrStr':
+                            die = this.actor.system.attributes.strength.die
+                        break
+                        case 'SWADE.AttrVig':
+                            die = this.actor.system.attributes.vigor.die
+                        break
+                    }
+                    let img = IMG_DICE+'d'+die.sides+'-grey.svg'
+
                 return {
                     id: ATTRIBUTE_ID[key],
                     name: coreModule.api.Utils.i18n(key),
+                    img: img,
 					description:  coreModule.api.Utils.i18n('SWADE.Attributes'),
-                    encodedValue: ['attributes', ATTRIBUTE_ID[key]].join(this.delimiter)
+                    encodedValue: ['attributes', ATTRIBUTE_ID[key]].join(this.delimiter),
+                    info1: { text: SavageActionHandler._buildDieString(die) }
                 }
             });
 
             this.addActions(actions, parent);
 
         }
-
         static _buildDieString(die={}) {
 			if (!die) return "";
 			const result = `d${die.sides}`;
@@ -101,6 +124,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             const dieMod = mod > 0 ? `+${mod}` : `${mod}`;
             return `${result}${dieMod}`;
         }
+
 
     }
 

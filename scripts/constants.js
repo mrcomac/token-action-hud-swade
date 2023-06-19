@@ -5,3 +5,5 @@ export const ATTRIBUTE_ID = {
     'SWADE.AttrStr': "strengh",
     'SWADE.AttrVig': "vigor"
 }
+
+export const IMG_DICE = '../../systems/swade/assets/dice/'
