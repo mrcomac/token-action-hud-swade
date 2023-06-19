@@ -1,3 +1,5 @@
+import { ATTRIBUTE_ID } from './constants.js'
+
 export let SavageActionHandler = null
 export let SavageRollHandler = null
 export let SavageSystemManager = null
@@ -64,16 +66,16 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
         _getAttributes(parent) {
             // Loading attributes into the list.
             let actions = [ 
-                coreModule.api.Utils.i18n('SWADE.AttrAgi'), 
-                coreModule.api.Utils.i18n('SWADE.AttrSma'), 
-                coreModule.api.Utils.i18n('SWADE.AttrSpr'), 
-                coreModule.api.Utils.i18n('SWADE.AttrStr'), 
-                coreModule.api.Utils.i18n('SWADE.AttrVig') ].map( key => {
+                'SWADE.AttrAgi', 
+                'SWADE.AttrSma', 
+                'SWADE.AttrSpr', 
+                'SWADE.AttrStr', 
+                'SWADE.AttrVig' ].map( key => {
                 return {
-                    id: key,
-                    name: key,
+                    id: ATTRIBUTE_ID[key],
+                    name: coreModule.api.Utils.i18n(key),
 					description:  coreModule.api.Utils.i18n('SWADE.Attributes'),
-                    encodedValue: ['attributes', key].join(this.delimiter)
+                    encodedValue: ['attributes', ATTRIBUTE_ID[key]].join(this.delimiter)
                 }
             });
 
@@ -111,6 +113,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.actor.rollAttribute(actionId.toLowerCase());
                     break;
                 case "skills":
+                    
                     this.actor.rollSkill(actionId.toLowerCase());
                     break;
                 case "powers":
