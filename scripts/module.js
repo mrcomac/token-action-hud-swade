@@ -37,6 +37,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 let element = {
                     id: el.id,
                     name: el.name,
+                    img: el.img,
                     description: el.system.description,
                     encodedValue: [parent.id,el.id].join(this.delimiter)
                 }
@@ -56,6 +57,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 return {
                     id: element.id,
                     name: element.name,
+                    img: element.img,
                     description: element.system.description,
                     encodedValue: ['skills',element.id].join(this.delimiter)
                 }
