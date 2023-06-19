@@ -16,4 +16,4 @@ https://github.com/mrcomac/token-action-hud-swade/releases/latest/download/modul
 
 ## License
 
-This software is released under the GPL.
+This software is released under the MIT.
