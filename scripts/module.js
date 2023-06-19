@@ -37,8 +37,14 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 let element = {
                     id: el.id,
                     name: el.name,
+                    img: el.img,
                     description: el.system.description,
-                    encodedValue: [parent.id,el.id].join(this.delimiter)
+                    encodedValue: [parent.id,el.id].join(this.delimiter),
+                }
+                if (["power", "weapon"].includes(el.type) && el.system.damage) {
+                    element.info1 = { text: el.system.damage }
+                } else if (el.system.die) {
+                    element.info1 = { text: SavageActionHandler._buildDieString(el.system.die) }
                 }
                 if(el.system.favorite == true) {
                     items_favorities.push(element)
@@ -56,8 +62,10 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 return {
                     id: element.id,
                     name: element.name,
+                    img: element.img,
                     description: element.system.description,
-                    encodedValue: ['skills',element.id].join(this.delimiter)
+                    encodedValue: ['skills',element.id].join(this.delimiter),
+                    info1: { text: SavageActionHandler._buildDieString(element.system.die) }
                 }
                 
             });
@@ -81,6 +89,17 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
             this.addActions(actions, parent);
 
+        }
+
+        static _buildDieString(die={}) {
+			if (!die) return "";
+			const result = `d${die.sides}`;
+			const mod = parseInt(die.modifier);
+			if (!die.modifier || mod === 0) {
+                return result;
+            }
+            const dieMod = mod > 0 ? `+${mod}` : `${mod}`;
+            return `${result}${dieMod}`;
         }
 
     }
