@@ -59,9 +59,16 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
         
         /** @override */
         _rollItem(event, actor, actionId, tokenId) {
-            //const item = super.getItem(actor, actionId);
-            //item.show();
+            
             let behavior;
+            
+            const item = actor.items.filter(el => el.id === actionId)[0];
+
+            if(item.type === 'consumable') {
+                item.show()
+                return
+            }
+
             if (event.ctrlKey === true) {
                 behavior = game.settings.get("betterrolls-swade2", "ctrl_click");
             } else if (event.altKey === true) {
@@ -71,6 +78,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             } else {
                 behavior = game.settings.get("betterrolls-swade2", "click");
             }
+            
             if (behavior === "trait") {
                 game.brsw
                     .create_item_card_from_id(tokenId, actor.id, actionId)
