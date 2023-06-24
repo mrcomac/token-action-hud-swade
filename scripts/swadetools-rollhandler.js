@@ -1,9 +1,12 @@
-export let SavageRollHandler = null
+
+export let SwadeToolsRollHandler = null
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
-    SavageRollHandler = class SavageRollHandler extends coreModule.api.RollHandler {
+
+    SwadeToolsRollHandler = class SwadeToolsRollHandler extends coreModule.api.RollHandler {
         
         async doHandleActionEvent(event, encodedValue) {
+            
             let payload = encodedValue.split("|");
 
             let macroType = payload[0];
@@ -22,10 +25,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 case "item":
                 case "weapons":
                 case "gears":
-                case "consumables":
                 case "powers":
                     this._rollItem(event, actor, actionId);
-                    break;
+                break;
+                case "consumables":
+                    const item = actor.items.filter(el => el.id === actionId)[0];
+                    item.show()
+                break
                 case "status":
                     await this._toggleStatus(event, actor, actionId, tokenId);
                     break;
@@ -59,8 +65,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /** @private */
         _rollItem(event, actor, actionId) {
-            const item = actor.items.filter(el => el.id === actionId)[0];
-            item.show();
+            game.swadetools.item(actor,actionId)
         }
 
         /** @private */
@@ -99,13 +104,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @private */
-        _rollAttribute(event, actor, actionId) {
-            actor.rollAttribute(actionId, { event: event });
+        async _rollAttribute(event, actor, actionId) {
+            await game.swadetools.attribute(actor,actionId)
         }
 
         /** @private */
-        _rollSkill(event, actor, actionId) {
-            actor.rollSkill(actionId, { event: event });
+        async _rollSkill(event, actor, actionId) {
+            await game.swadetools.skill(actor,actionId)
+        }
+
+        async _run(event,actor,actionId) {
+            await game.swadetools.run(actor)
         }
 
         /** @private */

@@ -2,11 +2,11 @@
   "id": "token-action-hud-swade",
   "title": "Token Action HUD SWADE",
   "description": "Provide support for the savage worlds game system with Token Action HUD Core",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "compatibility": {
     "minimum": "11",
-    "verified": "11.302",
-    "maximum": "11.302"
+    "verified": "11",
+    "maximum": "11"
   },
   "authors": [
     {
@@ -44,12 +44,10 @@
   "esmodules": [
     "scripts/module.js"
   ],
-  "styles": [
-    "styles/token-action-hud-swade.css"
-  ],
+  "styles": ["./styles/token-action-hud-swade.css"],
   "url": "https://github.com/mrcomac/token-action-hud-swade",
-  "manifest": "https://github.com/mrcomac/token-action-hud-swade/releases/download/0.6.0/module.json",
-  "download": "https://github.com/mrcomac/token-action-hud-swade/releases/download/0.6.0/token-action-hud-swade.zip",
+  "manifest": "https://github.com/mrcomac/token-action-hud-swade/releases/download/0.6.1/module.json",
+  "download": "https://github.com/mrcomac/token-action-hud-swade/releases/download/0.6.1/token-action-hud-swade.zip",
   "license": "LICENSE",
   "readme": "README.md"
 }

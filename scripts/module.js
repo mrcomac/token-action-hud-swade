@@ -1,6 +1,7 @@
 import { SavageActionHandler } from './action-handler.js'
 import { SavageRollHandler } from './core-rollhandler.js'
 import { BR2RollHandler } from './br2-rollhandler.js'
+import { SwadeToolsRollHandler } from './swadetools-rollhandler.js'
 
 export let SavageSystemManager = null
 
@@ -33,6 +34,8 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             let choices = { core: "Core SWADE" }
             if (coreModule.api.Utils.isModuleActive('betterrolls-swade2')) {
                 SavageSystemManager.addHandler(choices, "betterrolls-swade2")
+            } else if(coreModule.api.Utils.isModuleActive('swade-tools')) {
+                SavageSystemManager.addHandler(choices, "swade-tools")
             } else {
                 choices = { core: coreTitle }
                 SavageSystemManager.addHandler(choices, 'swade')
@@ -47,6 +50,9 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             switch (handlerId) {
                 case 'betterrolls-swade2':
                     rollHandler = new BR2RollHandler()
+                break
+                case 'swade-tools':
+                    rollHandler = new SwadeToolsRollHandler()
                 break
                 case 'core':
                 default:
