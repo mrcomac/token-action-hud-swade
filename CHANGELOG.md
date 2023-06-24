@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## 0.6.1
+- Support for swade tools
 ## 0.6.0
 - Support for better rolls 2
 ## 0.5
