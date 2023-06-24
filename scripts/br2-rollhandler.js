@@ -23,6 +23,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 case "weapons":
                 case "gears":
                 case "consumables":
+                case "powers":
                     this._rollItem(event, actor, actionId);
                     break;
                 case "status":

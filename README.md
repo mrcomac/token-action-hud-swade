@@ -1,6 +1,10 @@
 # Introduction
-
 A plug-in module for the module [Token Action HUD Core](https://foundryvtt.com/packages/token-action-hud-core) which adds support for the [Savage Worlds](https://foundryvtt.com/packages/swade).
+## Savage Worlds Core
+![Token Action HUD for Savage Worlds](readme/core.gif)
+
+## It supports Better Rolls 2 for Savage Worlds
+![Token Action HUD Better Rolls 2 supported](readme/br2.gif)
 
 ## Behaviour reminders from HUD Core
 
