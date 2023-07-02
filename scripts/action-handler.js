@@ -55,43 +55,53 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             })
         }
         _powerpoints(parent) {
-            let actions = [ ]
             if((this.actor.items.filter(i => i.type === 'power')).length == 0) return;
-            actions.push({
-                id:'pp',
-                name: coreModule.api.Utils.i18n('SWADE.PP'),
-                img: IMG_DICE+"pp.webp",
-                //img: game.settings.get("swade", "bennyImageSheet"),
-                cssClass: "disabled",
-                description: coreModule.api.Utils.i18n('SWADE.PP'),
-                encodedValue: ['powerPoints', 'NONE'].join(this.delimiter),
-                info1: { text: String(this.actor.system.powerPoints.general.value) +"/"+String(this.actor.system.powerPoints.general.max) }
-            })
-            
+            let groups = Object.entries(this.actor.system.powerPoints)
 
-            actions.push({
-                id:'ppAdd',
-                name: "",
-                cssClass: "",
-                //img: IMG_DICE+"plus.webp",
-                icon1: '<i class="fa fa-plus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
-                description: coreModule.api.Utils.i18n('SWADE.PP'),
-                encodedValue: ['powerPoints', 'add'].join(this.delimiter)
-                //info1: { text: String(this.actor.system.wounds.value) }
-            })
-            if(this.actor.system.powerPoints.general.value > 0) {
+            groups.forEach(group => {
+                const newg = { id: 'pp'+group[0], name: group[0], type: 'system' }
+                this.addGroup( newg,parent)
+                let actions = [ ]
                 actions.push({
-                    id:'ppRemove',
+                    id:'ppread'+group[0],
+                    name: group[0],
+                    img: IMG_DICE+"pp.webp",
+                    //img: game.settings.get("swade", "bennyImageSheet"),
+                    cssClass: "disabled",
+                    description: coreModule.api.Utils.i18n('SWADE.PP'),
+                    encodedValue: ['powerPoints', 'NONE'].join(this.delimiter),
+                    info1: { text: String(group[1].value) +"/"+String(group[1].max) }
+                })
+                
+                let encodevalue = 'add>'+group[0]
+                actions.push({
+                    id:'ppAdd'+group[0],
                     name: "",
                     cssClass: "",
-                    icon1: '<i class="fa fa-minus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
+                    //img: IMG_DICE+"plus.webp",
+                    icon1: '<i class="fa fa-plus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
                     description: coreModule.api.Utils.i18n('SWADE.PP'),
-                    encodedValue: ['powerPoints', 'remove'].join(this.delimiter)
+                    encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
                     //info1: { text: String(this.actor.system.wounds.value) }
                 })
-            }
+                if(this.actor.system.powerPoints.general.value > 0) {
+                    encodevalue = 'remove>'+group[0]
+                    actions.push({
+                        id:'ppRemove'+group[0],
+                        name: "",
+                        cssClass: "",
+                        icon1: '<i class="fa fa-minus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
+                        description: coreModule.api.Utils.i18n('SWADE.PP'),
+                        encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
+                        //info1: { text: String(this.actor.system.wounds.value) }
+                    })
+                }
 
-            this.addActions(actions, parent);
+                this.addActions(actions, newg);
+            })
+
+
+            
 
         }
         _getItems(parent, itemtype) {
@@ -148,10 +158,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             attributes.push("run")
             attributes.forEach((a) => {
                 if(a == 'run') {
+                    let img = this.actor.system.stats.speed.runningDie
+                    if(typeof img === 'undefined') {
+                        img = '4'
+                    }
                     let action = {
                         id:'run',
                         name: coreModule.api.Utils.i18n('SWADE.Running'),
-                        img: IMG_DICE + 'd' +this.actor.system.stats.speed.runningDie + '.svg',
+                        img: IMG_DICE + 'd' + img + '.svg',
                         description: coreModule.api.Utils.i18n('SWADE.Running'),
                         encodedValue: ['runningDie', 'runningDie'].join(this.delimiter),
                         //info1: { text: /*SavageActionHandler._buildDieString(data.die)*/ }
@@ -275,11 +289,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 actions.push(action)
             })
             this.addActions(actions, parent); 
-
-/*
-            
-*/
-            //this.addActions(actions, {id: 'utilitystatuses', type: 'system' });
 
 
         }

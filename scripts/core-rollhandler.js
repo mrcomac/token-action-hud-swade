@@ -68,12 +68,14 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         _wounds(event,actor,actionId) {
             let update = { data: { } };
+            let poll = actionId.split(">")
+            if(poll.length == 2) actionId = poll[0]
             if(actionId == "add") {
                 if(event == 'powerPoints') {
-                    update["data"][event] = {
-                        general: {
-                            value: actor.system[event].general.value += 1
-                        }
+                    let p = poll[1]
+                    update["data"][event] = {}
+                    update["data"][event][p] = {
+                        value: actor.system[event][p].value += 1
                     }
                 } else {
                     update["data"][event]= {
@@ -82,11 +84,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
             }
             else if(actionId == "remove") {
-                if(event == 'powerPoints' && actor.system[event].general.value > 0) {
-                    update["data"][event] = {
-                        general: {
-                            value: actor.system[event].general.value -= 1
-                        }
+                if(event == 'powerPoints') {
+                    let p = poll[1]
+                    update["data"][event] = {}
+                    update["data"][event][p]= {
+                        value: actor.system[event][p].value -= 1
                     }
                 } else if(actor.system[event].value > 0) {
                     update["data"][event]= {
