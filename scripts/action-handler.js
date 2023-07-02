@@ -22,8 +22,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             })
 
             this._getUtilities({ id: "utility", type: 'system'})
-            this._getStatuses({ id: "utilitystatuses", type: 'system'})
-            this._powerpoints({ id: 'powerspoints', type: 'system' })
+            this._getStatuses({ id: "statuses", type: 'system'})
+            this._powerpoints({ id: 'powerpoints', type: 'system' })
             this._effects()
 
         }
@@ -191,7 +191,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         _getWounds() {
             let actions = [ ]
-            let parent = {id: 'healthwounds', type: 'system' };
+            let parent = {id: 'wounds', type: 'system' };
             actions.push({
                 id:'Wounds',
                 name: coreModule.api.Utils.i18n('SWADE.Wounds'),
@@ -230,7 +230,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         }
         async _getFatigue() {
-            let parent = {id: 'healthfatigue', type: 'system' };
+            let parent = {id: 'fatigue', type: 'system' };
             let actions = []
             actions.push({
                 id:'fatigue',
@@ -305,7 +305,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     info1: { text: this.actor.system.bennies.value }
                 }
                 let actions = [ action ]
-                this.addActions(actions, {id: 'utilitybenny', type: 'system' });
+                this.addActions(actions, {id: 'benny', type: 'system' });
             }
             this._getWounds()
             this._getFatigue()
@@ -320,7 +320,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     //info1: { text: this.actor.system.bennies.value }
                 }
                 let actions = [ action ]
-                this.addActions(actions, {id: 'utilitybenny', type: 'system' });
+                this.addActions(actions, {id: 'benny', type: 'system' });
             }
 
         }
