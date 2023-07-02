@@ -1,4 +1,4 @@
-import { ATTRIBUTE_ID, IMG_DICE } from './constants.js'
+import { ATTRIBUTE_ID, ICONSDIR, IMG_DICE } from './constants.js'
 //export let ActionHandler = null
 export let SavageActionHandler = null
 
@@ -22,6 +22,76 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             })
 
             this._getUtilities({ id: "utility", type: 'system'})
+            this._getStatuses({ id: "utilitystatuses", type: 'system'})
+            this._powerpoints({ id: 'powerspoints', type: 'system' })
+            this._effects()
+
+        }
+        _effects() {
+            return;
+            let temporary = { id: 'effectstemp', type: 'system' }
+            let permanent = { id: 'effectsperm', type: 'system' }
+            let ignore = ['Shaken', 'Distr', 'Vuln', 'Stunned', 'Entangled', 'Bound', 'Incap']
+
+            let effects = Array.from(this.actor.effects.filter(el => !ignore.includes(el.name))) //)[1].isTemporary
+            
+            effects.forEach( eff => {
+                let group = temporary
+                if(!eff.isTemporary) {
+                    group = permanent
+                }
+                this.addActions([{
+                    id:'ef'+eff.name,
+                    name: eff.name,
+                    img: eff.icon,
+                    //img: game.settings.get("swade", "bennyImageSheet"),
+                    cssClass: this.actor.effects.filter(el => el.id === eff.id)[0].disabled ? "toggle active" : "togle",
+                    description: eff.name,
+                    encodedValue: ['effects', eff.id].join(this.delimiter)
+                    //info1: { text: String(this.actor.system.powerPoints.general.value) +"/"+String(this.actor.system.powerPoints.general.max) }
+                }], group);
+                
+
+            })
+        }
+        _powerpoints(parent) {
+            let actions = [ ]
+            if((this.actor.items.filter(i => i.type === 'power')).length == 0) return;
+            actions.push({
+                id:'pp',
+                name: coreModule.api.Utils.i18n('SWADE.PP'),
+                img: IMG_DICE+"pp.webp",
+                //img: game.settings.get("swade", "bennyImageSheet"),
+                cssClass: "disabled",
+                description: coreModule.api.Utils.i18n('SWADE.PP'),
+                encodedValue: ['powerPoints', 'NONE'].join(this.delimiter),
+                info1: { text: String(this.actor.system.powerPoints.general.value) +"/"+String(this.actor.system.powerPoints.general.max) }
+            })
+            
+
+            actions.push({
+                id:'ppAdd',
+                name: "",
+                cssClass: "",
+                //img: IMG_DICE+"plus.webp",
+                icon1: '<i class="fa fa-plus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
+                description: coreModule.api.Utils.i18n('SWADE.PP'),
+                encodedValue: ['powerPoints', 'add'].join(this.delimiter)
+                //info1: { text: String(this.actor.system.wounds.value) }
+            })
+            if(this.actor.system.powerPoints.general.value > 0) {
+                actions.push({
+                    id:'ppRemove',
+                    name: "",
+                    cssClass: "",
+                    icon1: '<i class="fa fa-minus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
+                    description: coreModule.api.Utils.i18n('SWADE.PP'),
+                    encodedValue: ['powerPoints', 'remove'].join(this.delimiter)
+                    //info1: { text: String(this.actor.system.wounds.value) }
+                })
+            }
+
+            this.addActions(actions, parent);
 
         }
         _getItems(parent, itemtype) {
@@ -70,24 +140,150 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.addActions(actions, parent)
         }
         _getAttributes(parent) {
+            this.addGroup( { id: 'derivedstats', name: coreModule.api.Utils.i18n('SWADE.Derived'), type: 'system' },{id :'attributes', type: 'custom'})
             const macroType = "attributes";
             let actions = []
-            Object.entries(this.actor.system.attributes).forEach((a) => {
-                const key = a[0];
-                const data = a[1];
-                let img = IMG_DICE + 'd' + data.die.sides + '.svg'
-                let action =  {
-                    id:key,
-                    name: coreModule.api.Utils.i18n(key),
-                    img: img,
-                    description: coreModule.api.Utils.i18n('SWADE.Attributes'),
-                    encodedValue: [macroType, key].join(this.delimiter),
-                    info1: { text: SavageActionHandler._buildDieString(data.die) }
+            
+            let attributes = Object.entries(this.actor.system.attributes)
+            attributes.push("run")
+            attributes.forEach((a) => {
+                if(a == 'run') {
+                    let action = {
+                        id:'run',
+                        name: coreModule.api.Utils.i18n('SWADE.Running'),
+                        img: IMG_DICE + 'd' +this.actor.system.stats.speed.runningDie + '.svg',
+                        description: coreModule.api.Utils.i18n('SWADE.Running'),
+                        encodedValue: ['runningDie', 'runningDie'].join(this.delimiter),
+                        //info1: { text: /*SavageActionHandler._buildDieString(data.die)*/ }
+                    };
+                    let child = {id: 'derivedstats', type: 'system'}
+                    this.addActions([action],child)
+                } else {
+                    const key = a[0];
+                    const data = a[1];
+                    let img = IMG_DICE + 'd' + data.die.sides + '.svg'
+                    actions.push({
+                        id:key,
+                        name: coreModule.api.Utils.i18n(key),
+                        img: img,
+                        description: coreModule.api.Utils.i18n('SWADE.Attributes'),
+                        encodedValue: [macroType, key].join(this.delimiter),
+                       //info1: { text: SavageActionHandler._buildDieString(data.die) }
+                    })
                 }
-            actions.push(action)
             })
             this.addActions(actions, parent)
         }
+
+        _getWounds() {
+            let actions = [ ]
+            let parent = {id: 'healthwounds', type: 'system' };
+            actions.push({
+                id:'Wounds',
+                name: coreModule.api.Utils.i18n('SWADE.Wounds'),
+                img: IMG_DICE+"wound.webp",
+                //img: game.settings.get("swade", "bennyImageSheet"),
+                cssClass: "disabled",
+                description: coreModule.api.Utils.i18n('SWADE.Wounds'),
+                encodedValue: ['wounds', 'NONE'].join(this.delimiter),
+                info1: { text: String(this.actor.system.wounds.value) +"/"+String(this.actor.system.wounds.max) }
+            })
+            
+
+            actions.push({
+                id:'WoundsAdd',
+                name: "",
+                cssClass: "",
+                //img: IMG_DICE+"plus.webp",
+                icon1: '<i class="fa fa-plus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
+                description: coreModule.api.Utils.i18n('SWADE.Wounds'),
+                encodedValue: ['wounds', 'add'].join(this.delimiter)
+                //info1: { text: String(this.actor.system.wounds.value) }
+            })
+            if(this.actor.system.wounds.value > 0) {
+                actions.push({
+                    id:'WoundsRemove',
+                    name: "",
+                    cssClass: "",
+                    icon1: '<i class="fa fa-minus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
+                    description: coreModule.api.Utils.i18n('SWADE.Wounds'),
+                    encodedValue: ['wounds', 'remove'].join(this.delimiter)
+                    //info1: { text: String(this.actor.system.wounds.value) }
+                })
+            }
+
+            this.addActions(actions, parent);
+
+        }
+        async _getFatigue() {
+            let parent = {id: 'healthfatigue', type: 'system' };
+            let actions = []
+            actions.push({
+                id:'fatigue',
+                name: coreModule.api.Utils.i18n('SWADE.Fatigue'),
+                img: IMG_DICE+"fatigue.webp",
+                //img: game.settings.get("swade", "bennyImageSheet"),
+                cssClass: "disabled",
+                description: coreModule.api.Utils.i18n('SWADE.Fatigue'),
+                encodedValue: ['fatigue', 'NONE'].join(this.delimiter),
+                info1: { text: String(this.actor.system.fatigue.value) +"/"+String(this.actor.system.fatigue.max) }
+            })
+            actions.push({
+                id:'FatigueAdd',
+                name: "",
+                cssClass: "",
+                icon1: '<i class="fa fa-plus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
+                description: coreModule.api.Utils.i18n('SWADE.Fatigue'),
+                encodedValue: ['fatigue', 'add'].join(this.delimiter)
+            
+            })
+            
+            if(this.actor.system.fatigue.value > 0) {
+                actions.push({
+                    id:'FatigueRemove',
+                    name: "",
+                    cssClass: "",
+                    icon1: '<i class="fa fa-minus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
+                    description: coreModule.api.Utils.i18n('SWADE.Fatigue'),
+                    encodedValue: ['fatigue', 'remove'].join(this.delimiter)
+                
+                })
+            }
+            
+
+            this.addActions(actions, parent);
+
+        }
+        _getStatuses(parent) {
+            let actions = [];
+            ['Shaken', 'Distr', 'Vuln', 'Stunned', 'Entangled', 'Bound', 'Incap'].forEach(el => {
+                let fullname = coreModule.api.Utils.i18n('SWADE.'+el)
+                //let img = ICONSDIR+"/status/status_"+fullname.toLocaleLowerCase()+".svg";
+                let img = CONFIG.statusEffects.find((el) => el.id === fullname.toLocaleLowerCase())?.icon ?? null;
+                //if(el == "Incap") img = "systems/swade/assets/ui/incapacitated.svg";
+                
+                let en = this.actor.statuses.has(fullname.toLowerCase()) ? "remove" : "add";
+                let action =  {
+                    id: fullname.toLowerCase(),
+                    name: fullname,
+                    cssClass: this.actor.statuses.has(fullname.toLowerCase()) ? "toggle active" : "togle",
+                    img: img,
+                    description: fullname,
+                    encodedValue: ['statuses', fullname].join(this.delimiter)
+                    //info1: { text: String(this.actor.system.wounds.value) }
+                }
+                actions.push(action)
+            })
+            this.addActions(actions, parent); 
+
+/*
+            
+*/
+            //this.addActions(actions, {id: 'utilitystatuses', type: 'system' });
+
+
+        }
+        
         _getUtilities(parent){
             const bennies = this.actor.system.bennies
             if(bennies.value > 0) {
@@ -102,6 +298,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 let actions = [ action ]
                 this.addActions(actions, {id: 'utilitybenny', type: 'system' });
             }
+            this._getWounds()
+            this._getFatigue()
 
             if(game.user.isGM) {
                 let action =  {
@@ -114,7 +312,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
                 let actions = [ action ]
                 this.addActions(actions, {id: 'utilitybenny', type: 'system' });
-
             }
 
         }

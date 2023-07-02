@@ -1,7 +1,8 @@
 import { SavageActionHandler } from './action-handler.js'
-import { SavageRollHandler } from './core-rollhandler.js'
-import { BR2RollHandler } from './br2-rollhandler.js'
+import { SavageRollHandler as CoreRoll } from './core-rollhandler.js'
+import { BR2RollHandler as BR2Roll } from './br2-rollhandler.js'
 import { SwadeToolsRollHandler } from './swadetools-rollhandler.js'
+import { MODULEDIR } from './constants.js'
 
 export let SavageSystemManager = null
 
@@ -14,12 +15,10 @@ function chatItem(message,actor) {
         speaker: ChatMessage.getSpeaker({token: actor}),
         content: message
         });
-  }
+}
+
 
 Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
-
-    // Core Module Imports
-
     SavageSystemManager = class SavageSystemManager extends coreModule.api.SystemManager {
         /** @override */
         doGetActionHandler() {
@@ -49,14 +48,14 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             let rollHandler
             switch (handlerId) {
                 case 'betterrolls-swade2':
-                    rollHandler = new BR2RollHandler()
+                    rollHandler = new BR2Roll()
                 break
                 case 'swade-tools':
                     rollHandler = new SwadeToolsRollHandler()
                 break
                 case 'core':
                 default:
-                    rollHandler = new SavageRollHandler()
+                    rollHandler = new CoreRoll()
                 break
             }
 
@@ -72,18 +71,26 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             const GROUP = {
                 utility: { id: 'utility', name: coreModule.api.Utils.i18n('SWADE.General'), type: 'system' },
                 attributes: { id: 'attributes', name: coreModule.api.Utils.i18n('SWADE.Attributes'), type: 'system' },
+                attributesdev: { id: 'derivedstats', name: coreModule.api.Utils.i18n('SWADE.Derived'), type: 'system' },
                 skills: { id: 'skills', name: coreModule.api.Utils.i18n('SWADE.Skills'), type: 'system' },
                 powers: { id: 'powers', name: coreModule.api.Utils.i18n('SWADE.Pow'), type: 'system' },
                 powersfav: { id: 'powersfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess'), type: 'system' },
+                powerspoints: { id: 'powerspoints', name: coreModule.api.Utils.i18n('SWADE.PP'), type: 'system' },
                 consumables: { id: 'consumables', name: coreModule.api.Utils.i18n('SWADE.Consumable.Consumables'), type: 'system' },
                 consumablesfav: { id: 'consumablesfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess'), type: 'system' },
                 gears: { id: 'gears', name: coreModule.api.Utils.i18n('TYPES.Item.gear'), type: 'system' },
                 gearsfav: { id: 'gearsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess'), type: 'system' },
-                weapons: { id: 'weapons', name: coreModule.api.Utils.i18n('TYPES.Item.weapon'), type: 'system' },
+                weapons: { id: 'weapons', name: coreModule.api.Utils.i18n('SWADE.Weapons'), type: 'system' },
                 weaponsfav: { id: 'weaponsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess'), type: 'system' },
-                actions: { id: 'actions', name: coreModule.api.Utils.i18n('TYPES.Item.action'), type: 'system' },
+                actions: { id: 'actions', name: coreModule.api.Utils.i18n('SWADE.Actions'), type: 'system' },
                 actionsfav: { id: 'actionsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess'), type: 'system' },
-                utilitybenny: { id: 'utilitybenny', name: coreModule.api.Utils.i18n('SWADE.Rolls.Benny'), type: 'system' }
+                healthwounds: { id: 'healthwounds', name: "Wounds", type: 'system' },
+                healthfatigue: { id: 'healthfatigue', name: "Fatigue", type: 'system' },
+                utilitybenny: { id: 'utilitybenny', name: coreModule.api.Utils.i18n('SWADE.Rolls.Benny'), type: 'system' },
+                utilitystatuses: { id: 'utilitystatuses', name: coreModule.api.Utils.i18n('SWADE.Status'), type: 'system' },
+                effectsperm: { id: 'effectsperm', name: coreModule.api.Utils.i18n('SWADE.EffectsPermanent'), type: 'system' },
+                effectstemp: { id: 'effectstemp', name: coreModule.api.Utils.i18n('SWADE.EffectsTemporary'), type: 'system' }
+                
             }
             const groups = GROUP
             Object.values(groups).forEach(group => {
@@ -99,13 +106,23 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                         name: coreModule.api.Utils.i18n('SWADE.General'),
                         groups: [
                             { ...groups.utility, nestId: 'utility_utility' },
-                            { ...groups.utilitybenny, nestId: 'utility_benny' }
+                            { ...groups.utilitybenny, nestId: 'utility_benny' },
+                            { ...groups.utilitystatuses, nestId: 'utility_statuses' }
+                        ]
+                    },
+                    {
+                        nestId: 'health',
+                        id: 'health',
+                        name: "Health",
+                        groups: [
+                            { ...groups.healthwounds, nestId: 'health_wounds' },
+                            { ...groups.healthfatigue, nestId: 'health_fatigue' }
                         ]
                     },
                     {
                         nestId: 'actions',
                         id: 'actions',
-                        name: coreModule.api.Utils.i18n('TYPES.Item.action'),
+                        name: coreModule.api.Utils.i18n('SWADE.Actions'),
                         groups: [
                             { ...groups.actionsfav, nestId: 'actions_favorities' },
                             { ...groups.actions, nestId: 'actions_utility' }
@@ -116,7 +133,8 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                         id: 'attributes',
                         name: coreModule.api.Utils.i18n('SWADE.Attributes'),
                         groups: [
-                            { ...groups.attributes, nestId: 'attributes_abilities' }
+                            { ...groups.attributes, nestId: 'attributes_abilities' },
+                            { ...groups.attributesdev, nestId: 'derived_abilities' }
                         ]
                     },
                     {
@@ -132,6 +150,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                         id: 'powers',
                         name: coreModule.api.Utils.i18n('SWADE.Pow'),
                         groups: [
+                            { ...groups.powerspoints, nestId: 'powers_points' },
                             { ...groups.powersfav, nestId: 'powers_favorities' },
                             { ...groups.powers, nestId: 'powers_abilities' }
                         ]
@@ -139,7 +158,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     {
                         nestId: 'weapons',
                         id: 'weapons',
-                        name: coreModule.api.Utils.i18n('TYPES.Item.weapon'),
+                        name: coreModule.api.Utils.i18n('SWADE.Weapons'),
                         groups: [
                             { ...groups.weaponsfav, nestId: 'weapons_favorities' },
                             { ...groups.weapons, nestId: 'weapons_utility' }
@@ -162,11 +181,21 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                             { ...groups.gearsfav, nestId: 'gears_favorities' },
                             { ...groups.gears, nestId: 'gears_gear' }
                         ]
+                    },
+                    {
+                        nestId: 'effects',
+                        id: 'effects',
+                        name: coreModule.api.Utils.i18n('SWADE.Effects'),
+                        groups: [
+                            { ...groups.effectsperm, nestId: 'effects_permanent' },
+                            { ...groups.effectstemp, nestId: 'effects_temp' }
+                        ]
                     }
                     
                 ],
                 groups: groupsArray
             }
+            game.tokenActionHud.defaults = DEFAULTS
             return DEFAULTS
         }
     }

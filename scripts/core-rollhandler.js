@@ -26,8 +26,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 case "powers":
                     this._rollItem(event, actor, actionId);
                     break;
-                case "status":
-                    await this._toggleStatus(event, actor, actionId, tokenId);
+                case "effects":
+                case "statuses":
+                    await this._toggleStatus(macroType, actor, actionId, tokenId);
                     break;
                 case "benny":
                     this._adjustBennies(event, actor, actionId);
@@ -39,22 +40,62 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this._rollAttribute(event, actor, actionId);
                     break;
                 case "runningDie":
-                    actor.rollRunningDie();
+                    this._run();
                     break;
                 case "skills":
                     this._rollSkill(event, actor, actionId);
                     break;
-                case "wounds":
-                case "fatigue":
-                case "powerPoints":
+                /*case "powerPoints":
                     await this._adjustAttributes(event, actor, macroType, actionId);
-                    break;
+                    break;*/
                 case "utility":
                     if (actionId === "endTurn") {
                         if (game.combat?.current?.tokenId === tokenId) await game.combat?.nextTurn();
                     }
                     break;
+                case "wounds":
+                case "fatigue":
+                case "powerPoints":
+                    if(actionId != "NONE")
+                        this._wounds(macroType,actor,actionId)
+                break;
             }
+        }
+
+        _run() {
+            this.actor.rollRunningDie();
+        }
+
+        _wounds(event,actor,actionId) {
+            let update = { data: { } };
+            if(actionId == "add") {
+                if(event == 'powerPoints') {
+                    update["data"][event] = {
+                        general: {
+                            value: actor.system[event].general.value += 1
+                        }
+                    }
+                } else {
+                    update["data"][event]= {
+                        value: actor.system[event].value += 1
+                    }
+                }
+            }
+            else if(actionId == "remove") {
+                if(event == 'powerPoints' && actor.system[event].general.value > 0) {
+                    update["data"][event] = {
+                        general: {
+                            value: actor.system[event].general.value -= 1
+                        }
+                    }
+                } else if(actor.system[event].value > 0) {
+                    update["data"][event]= {
+                        value: actor.system[event].value -= 1
+                    }
+                }
+                
+            }
+            actor.update(update)
         }
 
         /** @private */
@@ -65,11 +106,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /** @private */
         async _toggleStatus(event, actor, actionId, tokenId) {
-            const existsOnActor = actor.effects.find(
-                e => e.getFlag("core", "statusId") == actionId);
-            const data = game.swade.util.getStatusEffectDataById(actionId);
-            data["flags.core.statusId"] = actionId;
-            await canvas.tokens.get(tokenId).toggleEffect(data, { active: !existsOnActor });
+            if(event != "effects") {
+                const existsOnActor = this.actor.statuses.has(actionId.toLowerCase())
+                const data = game.swade.util.getStatusEffectDataById(actionId.toLowerCase());
+                data["flags.core.statusId"] = actionId;
+                await this.token.toggleEffect(data, { active: !existsOnActor });
+                
+            } else {
+                let effect = this.actor.effects.filter(el => el.id === actionId)[0]
+                await this.actor.effects.filter(el => el.id === actionId)[0].update({ disabled: !effect.disabled })
+            }
+            Hooks.callAll("forceUpdateTokenActionHUD");
         }
 
         /** @private */
