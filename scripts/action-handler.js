@@ -1,5 +1,4 @@
 import { ATTRIBUTE_ID, ICONSDIR, IMG_DICE } from './constants.js'
-//export let ActionHandler = null
 export let SavageActionHandler = null
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
@@ -56,53 +55,52 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
         _powerpoints(parent) {
             if((this.actor.items.filter(i => i.type === 'power')).length == 0) return;
+           
             let groups = Object.entries(this.actor.system.powerPoints)
 
+            const powers = this.actor.items.filter((power) => power.type === "power")
             groups.forEach(group => {
-                const newg = { id: 'pp'+group[0], name: group[0], type: 'system' }
-                this.addGroup( newg,parent)
-                let actions = [ ]
-                actions.push({
-                    id:'ppread'+group[0],
-                    name: group[0],
-                    img: IMG_DICE+"pp.webp",
-                    //img: game.settings.get("swade", "bennyImageSheet"),
-                    cssClass: "disabled",
-                    description: coreModule.api.Utils.i18n('SWADE.PP'),
-                    encodedValue: ['powerPoints', 'NONE'].join(this.delimiter),
-                    info1: { text: String(group[1].value) +"/"+String(group[1].max) }
-                })
-                
-                let encodevalue = 'add>'+group[0]
-                actions.push({
-                    id:'ppAdd'+group[0],
-                    name: "",
-                    cssClass: "",
-                    //img: IMG_DICE+"plus.webp",
-                    icon1: '<i class="fa fa-plus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
-                    description: coreModule.api.Utils.i18n('SWADE.PP'),
-                    encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
-                    //info1: { text: String(this.actor.system.wounds.value) }
-                })
-                if(this.actor.system.powerPoints.general.value > 0) {
-                    encodevalue = 'remove>'+group[0]
+                let arcane = group[0]
+                if(group[0] === 'general') arcane = ''
+                let g_powers = powers.filter((power) => power.system.arcane === arcane)
+                if(g_powers.length > 0) {
+                    const newg = { id: 'pp'+group[0], name: group[0], type: 'system' }
+                    this.addGroup( newg,parent)
+                    let actions = [ ]
                     actions.push({
-                        id:'ppRemove'+group[0],
+                        id:'ppread'+group[0],
+                        name: group[0],
+                        img: IMG_DICE+"pp.webp",
+                        cssClass: "disabled",
+                        description: coreModule.api.Utils.i18n('SWADE.PP'),
+                        encodedValue: ['powerPoints', 'NONE'].join(this.delimiter),
+                        info1: { text: String(group[1].value) +"/"+String(group[1].max) }
+                    })
+                    
+                    let encodevalue = 'add>'+group[0]
+                    actions.push({
+                        id:'ppAdd'+group[0],
                         name: "",
                         cssClass: "",
-                        icon1: '<i class="fa fa-minus" aria-hidden="true"></i>', // IMG_DICE+"plus.webp",
+                        icon1: '<i class="fa fa-plus" aria-hidden="true"></i>',
                         description: coreModule.api.Utils.i18n('SWADE.PP'),
                         encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
-                        //info1: { text: String(this.actor.system.wounds.value) }
                     })
+                    if(this.actor.system.powerPoints.general.value > 0) {
+                        encodevalue = 'remove>'+group[0]
+                        actions.push({
+                            id:'ppRemove'+group[0],
+                            name: "",
+                            cssClass: "",
+                            icon1: '<i class="fa fa-minus" aria-hidden="true"></i>',
+                            description: coreModule.api.Utils.i18n('SWADE.PP'),
+                            encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
+                        })
+                    }
+
+                    this.addActions(actions, newg);
                 }
-
-                this.addActions(actions, newg);
             })
-
-
-            
-
         }
         _getItems(parent, itemtype) {
             let items = []
