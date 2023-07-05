@@ -1,5 +1,7 @@
 # Introduction
 A plug-in module for the module [Token Action HUD Core](https://foundryvtt.com/packages/token-action-hud-core) which adds support for the [Savage Worlds](https://foundryvtt.com/packages/swade).
+
+If you want to learn how to use Token HUD, please check this wiki [Token HUD tutorials](https://github.com/Larkinabout/fvtt-token-action-hud-core/wiki/How-to-Use-Token-Action-HUD).
 ## Savage Worlds Core
 ![Token Action HUD for Savage Worlds](readme/core.gif)
 
@@ -21,3 +23,4 @@ https://github.com/mrcomac/token-action-hud-swade/releases/latest/download/modul
 ## License
 
 This software is released under the MIT.
+
