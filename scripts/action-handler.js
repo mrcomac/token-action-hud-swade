@@ -27,29 +27,36 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
         }
         _effects() {
-            return;
             let temporary = { id: 'effectstemp', type: 'system' }
             let permanent = { id: 'effectsperm', type: 'system' }
-            let ignore = ['Shaken', 'Distr', 'Vuln', 'Stunned', 'Entangled', 'Bound', 'Incap']
+            let ignore = [
+                coreModule.api.Utils.i18n('SWADE.Shaken'),
+                coreModule.api.Utils.i18n('SWADE.Distr'),
+                coreModule.api.Utils.i18n('SWADE.Vuln'),
+                coreModule.api.Utils.i18n('SWADE.Stunned'),
+                coreModule.api.Utils.i18n('SWADE.Entangled'),
+                coreModule.api.Utils.i18n('SWADE.Bound'),
+                coreModule.api.Utils.i18n('SWADE.Incap')
+            ]
 
-            let effects = Array.from(this.actor.effects.filter(el => !ignore.includes(el.name))) //)[1].isTemporary
-            
+            let effects = Array.from(this.actor.effects)
             effects.forEach( eff => {
                 let group = temporary
-                if(!eff.isTemporary) {
+                if(eff.isTemporary == false) {
                     group = permanent
                 }
-                this.addActions([{
-                    id:'ef'+eff.name,
-                    name: eff.name,
-                    img: eff.icon,
-                    //img: game.settings.get("swade", "bennyImageSheet"),
-                    cssClass: this.actor.effects.filter(el => el.id === eff.id)[0].disabled ? "toggle active" : "togle",
-                    description: eff.name,
-                    encodedValue: ['effects', eff.id].join(this.delimiter)
-                    //info1: { text: String(this.actor.system.powerPoints.general.value) +"/"+String(this.actor.system.powerPoints.general.max) }
-                }], group);
                 
+                if(!ignore.includes(eff.name)) {
+                    this.addActions([{
+                        id:'ef'+eff.name,
+                        name: eff.name,
+                        img: eff.icon,
+                        cssClass: eff.disabled ? "toggle" : "togle active",
+                        description: eff.name,
+                        encodedValue: ['effects', eff.id].join(this.delimiter),
+                        info2: { text: coreModule.api.Utils.i18n('SWADE.Dur')+": "+eff.duration.label }
+                    }], group);
+                }
 
             })
         }
@@ -86,17 +93,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         description: coreModule.api.Utils.i18n('SWADE.PP'),
                         encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
                     })
-                    if(this.actor.system.powerPoints.general.value > 0) {
-                        encodevalue = 'remove>'+group[0]
-                        actions.push({
-                            id:'ppRemove'+group[0],
-                            name: "",
-                            cssClass: "",
-                            icon1: '<i class="fa fa-minus" aria-hidden="true"></i>',
-                            description: coreModule.api.Utils.i18n('SWADE.PP'),
-                            encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
-                        })
-                    }
+                    
+                    encodevalue = 'remove>'+group[0]
+                    actions.push({
+                        id:'ppRemove'+group[0],
+                        name: "",
+                        cssClass: "",
+                        icon1: '<i class="fa fa-minus" aria-hidden="true"></i>',
+                        description: coreModule.api.Utils.i18n('SWADE.PP'),
+                        encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
+                    })
+                    
 
                     this.addActions(actions, newg);
                 }

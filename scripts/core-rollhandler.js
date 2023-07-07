@@ -75,11 +75,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     let p = poll[1]
                     update["data"][event] = {}
                     update["data"][event][p] = {
-                        value: actor.system[event][p].value += 1
+                        value: actor.system[event][p].value + 1
                     }
                 } else {
                     update["data"][event]= {
-                        value: actor.system[event].value += 1
+                        value: actor.system[event].value + 1
                     }
                 }
             }
@@ -88,11 +88,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     let p = poll[1]
                     update["data"][event] = {}
                     update["data"][event][p]= {
-                        value: actor.system[event][p].value -= 1
+                        value: actor.system[event][p].value - 1
                     }
                 } else if(actor.system[event].value > 0) {
                     update["data"][event]= {
-                        value: actor.system[event].value -= 1
+                        value: actor.system[event].value - 1
                     }
                 }
                 
@@ -118,7 +118,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 let effect = this.actor.effects.filter(el => el.id === actionId)[0]
                 await this.actor.effects.filter(el => el.id === actionId)[0].update({ disabled: !effect.disabled })
             }
-            Hooks.callAll("forceUpdateTokenActionHUD");
+            game.tokenActionHud.update()
         }
 
         /** @private */
