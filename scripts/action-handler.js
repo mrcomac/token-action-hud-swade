@@ -155,7 +155,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.addActions(actions, parent)
         }
         _getAttributes(parent) {
-            this.addGroup( { id: 'derivedstats', name: coreModule.api.Utils.i18n('SWADE.Derived'), type: 'system' },{id :'attributes', type: 'custom'})
+            //this.addGroup( { id: 'derivedstats', name: coreModule.api.Utils.i18n('SWADE.Derived'), type: 'system' },{id :'attributes', type: 'custom'})
             const macroType = "attributes";
             let actions = []
             
