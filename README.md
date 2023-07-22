@@ -2,12 +2,8 @@
 A plug-in module for the module [Token Action HUD Core](https://foundryvtt.com/packages/token-action-hud-core) which adds support for the [Savage Worlds](https://foundryvtt.com/packages/swade).
 
 If you want to learn how to use Token HUD, please check this wiki [Token HUD tutorials](https://github.com/Larkinabout/fvtt-token-action-hud-core/wiki/How-to-Use-Token-Action-HUD).
-## Savage Worlds Core
-![Token Action HUD for Savage Worlds](readme/core.gif)
 
-## It supports Better Rolls 2 for Savage Worlds
-![Token Action HUD Better Rolls 2 supported](readme/br2.gif)
-
+Token Action HUD supports [Better Rolls 2 for Savage Worlds](https://foundryvtt.com/packages/betterrolls-swade2) and [Swade Tools](https://foundryvtt.com/packages/swade-tools)
 ## Behaviour reminders from HUD Core
 
 - The Image of the items can be displayed by selecting 'Display Icons' in the HUD Core settings.
@@ -20,6 +16,8 @@ It can be installed by searching in Foundry's module installer, or by directly e
 
 https://github.com/mrcomac/token-action-hud-swade/releases/latest/download/module.json
 
+## What are we doing?
+[Sprint board of v0.X.X](https://github.com/users/mrcomac/projects/2)
 ## License
 
 This software is released under the MIT.
