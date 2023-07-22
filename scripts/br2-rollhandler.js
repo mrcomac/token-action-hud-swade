@@ -5,11 +5,10 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
     BR2RollHandler = class BR2RollHandler extends SavageRollHandler  {
                
         /** @override */
-        _rollItem(event, actor, actionId, tokenId) {
-            
+        _rollItem(event, actionId) {
             let behavior;
             
-            const item = actor.items.filter(el => el.id === actionId)[0];
+            const item = this.token.actor.items.filter(el => el.id === actionId)[0];
 
             if(item.type === 'consumable') {
                 item.show()
@@ -28,27 +27,25 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             
             if (behavior === "trait") {
                 game.brsw
-                    .create_item_card_from_id(tokenId, actor.id, actionId)
+                    .create_item_card(this.token, actionId)
                     .then((message) => {
                         game.brsw.roll_item(message, $(message.data.content), false);
                     });
             } else if (behavior === "trait_damage") {
                 game.brsw
-                    .create_item_card_from_id(tokenId, actor.id, actionId)
+                    .create_item_card(this.token, actionId)
                     .then((message) => {
                         game.brsw.roll_item(message, $(message.data.content), false, true);
                     });
             } else if (behavior === "system") {
-                game.swade.rollItemMacro(actor.items.get(actionId).name);
+                game.swade.rollItemMacro(this.token.actor.items.get(actionId).name);
             } else {
-                game.brsw.create_item_card_from_id(tokenId, actor.id, actionId);
+                game.brsw.create_item_card(this.token, actionId);
             }
         }
 
-
         /** @override */
-        _rollAttribute(event, actor, actionId, tokenId) {
-            //actor.rollAttribute(actionId, {event: event});
+        _rollAttribute(event, actionId) {
             let behavior;
             if (event.ctrlKey === true) {
                 behavior = game.settings.get("betterrolls-swade2", "ctrl_click");
@@ -61,20 +58,19 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             }
             if (behavior === "trait" || behavior === "trait_damage") {
                 game.brsw
-                    .create_attribute_card_from_id(tokenId, actor.id, actionId)
+                    .create_atribute_card(this.token, actionId)
                     .then((message) => {
                         game.brsw.roll_attribute(message, $(message.data.content), false);
                     });
             } else if (behavior === "system") {
-                actor.rollAttribute(actionId);
+                this.token.actor.rollAttribute(actionId);
             } else {
-                game.brsw.create_attribute_card_from_id(tokenId, actor.id, actionId);
+                game.brsw.create_atribute_card(this.token, actionId);
             }
         }
 
         /** @override */
-        _rollSkill(event, actor, actionId, tokenId) {
-            //actor.rollSkill(actionId, {event: event});
+        _rollSkill(event, actionId) {
             let behavior;
             if (event.ctrlKey === true) {
                 behavior = game.settings.get("betterrolls-swade2", "ctrl_click");
@@ -87,14 +83,14 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             }
             if (behavior === "trait" || behavior === "trait_damage") {
                 game.brsw
-                    .create_skill_card_from_id(tokenId, actor.id, actionId)
+                    .create_skill_card(this.token, actionId)
                     .then((message) => {
                         game.brsw.roll_skill(message, $(message.data.content), false);
                     });
             } else if (behavior === "system") {
-                game.swade.rollItemMacro(actor.items.get(actionId).name);
+                game.swade.rollItemMacro(this.token.actor.items.get(actionId).name);
             } else {
-                game.brsw.create_skill_card_from_id(tokenId, actor.id, actionId);
+                game.brsw.create_skill_card(this.token, actionId);
             }
         }
 

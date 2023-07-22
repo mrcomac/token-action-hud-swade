@@ -24,30 +24,27 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 case "gears":
                 case "consumables":
                 case "powers":
-                    this._rollItem(event, actor, actionId);
+                    this._rollItem(event, actionId);
                     break;
                 case "effects":
                 case "statuses":
-                    await this._toggleStatus(macroType, actor, actionId, tokenId);
+                    await this._toggleStatus(macroType, actionId);
                     break;
                 case "benny":
-                    this._adjustBennies(event, actor, actionId);
+                    this._adjustBennies(event, actionId);
                     break;
                 case "gmBenny":
-                    await this._adjustGmBennies(event, actor, actionId);
+                    await this._adjustGmBennies(event, actionId);
                     break;
                 case "attributes":
-                    this._rollAttribute(event, actor, actionId);
+                    this._rollAttribute(event, actionId);
                     break;
                 case "runningDie":
                     this._run();
                     break;
                 case "skills":
-                    this._rollSkill(event, actor, actionId);
+                    this._rollSkill(event, actionId);
                     break;
-                /*case "powerPoints":
-                    await this._adjustAttributes(event, actor, macroType, actionId);
-                    break;*/
                 case "utility":
                     if (actionId === "endTurn") {
                         if (game.combat?.current?.tokenId === tokenId) await game.combat?.nextTurn();
@@ -63,7 +60,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         _run() {
-            this.actor.rollRunningDie();
+            this.token.actor.rollRunningDie();
         }
 
         _wounds(event,actor,actionId) {
@@ -75,11 +72,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     let p = poll[1]
                     update["data"][event] = {}
                     update["data"][event][p] = {
-                        value: actor.system[event][p].value + 1
+                        value: this.token.actor.system[event][p].value + 1
                     }
                 } else {
                     update["data"][event]= {
-                        value: actor.system[event].value + 1
+                        value: this.token.actor.system[event].value + 1
                     }
                 }
             }
@@ -88,11 +85,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     let p = poll[1]
                     update["data"][event] = {}
                     update["data"][event][p]= {
-                        value: actor.system[event][p].value - 1
+                        value: this.token.actor.system[event][p].value - 1
                     }
                 } else if(actor.system[event].value > 0) {
                     update["data"][event]= {
-                        value: actor.system[event].value - 1
+                        value: this.token.actor.system[event].value - 1
                     }
                 }
                 
@@ -101,46 +98,44 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @private */
-        _rollItem(event, actor, actionId) {
-            const item = actor.items.filter(el => el.id === actionId)[0];
+        _rollItem(event, actionId) {
+            const item = this.token.actor.items.filter(el => el.id === actionId)[0];
             item.show();
         }
 
         /** @private */
-        async _toggleStatus(event, actor, actionId, tokenId) {
+        async _toggleStatus(event, actionId) {
             if(event != "effects") {
-                const existsOnActor = this.actor.statuses.has(actionId.toLowerCase())
+                const existsOnActor = this.token.actor.statuses.has(actionId.toLowerCase())
                 const data = game.swade.util.getStatusEffectDataById(actionId.toLowerCase());
                 data["flags.core.statusId"] = actionId;
                 await this.token.toggleEffect(data, { active: !existsOnActor });
                 
             } else {
-                let effect = this.actor.effects.filter(el => el.id === actionId)[0]
-                await this.actor.effects.filter(el => el.id === actionId)[0].update({ disabled: !effect.disabled })
+                let effect = this.token.actor.effects.filter(el => el.id === actionId)[0]
+                await this.token.actor.effects.filter(el => el.id === actionId)[0].update({ disabled: !effect.disabled })
             }
             game.tokenActionHud.update()
         }
 
         /** @private */
-        _adjustBennies(event, actor, actionId) {
+        _adjustBennies(event, actionId) {
             if (actionId === "spend") {
-                actor.spendBenny();
+                this.token.actor.spendBenny()
+            } else if (actionId === "give") {
+                this.token.actor.getBenny()
             }
-
-            if (actionId === "give") actor.getBenny();
         }
 
         /** @private */
-        async _adjustGmBennies(event, actor, actionId) {
+        async _adjustGmBennies(event, actionId) {
             let user = game.user;
             if (!user.isGM) return;
 
             const benniesValue = user.getFlag("swade", "bennies");
             if (actionId === "spend") {
                 game.user.spendBenny()
-            }
-
-            if (actionId === "give") {
+            } else if (actionId === "give") {
                 game.user.getBenny()
             }
 
@@ -148,13 +143,13 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @private */
-        _rollAttribute(event, actor, actionId) {
-            actor.rollAttribute(actionId, { event: event });
+        _rollAttribute(event, actionId) {
+            this.token.actor.rollAttribute(actionId, { event: event });
         }
 
         /** @private */
-        _rollSkill(event, actor, actionId) {
-            actor.rollSkill(actionId, { event: event });
+        _rollSkill(event, actionId) {
+            this.token.actor.rollSkill(actionId, { event: event });
         }
 
         /** @private */
