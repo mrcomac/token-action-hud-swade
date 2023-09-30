@@ -40,6 +40,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             ]
 
             let effects = Array.from(this.actor.effects)
+            const items = Array.from(this.actor.items.filter(it => ['edge', 'hindrance', 'ability'].includes(it.type)))
+            items.forEach(item => {
+                let _eff = Array.from(item.effects)
+                if(_eff.length > 0) effects = effects.concat(effects, _eff)
+            })
             effects.forEach( eff => {
                 let group = temporary
                 if(eff.isTemporary == false) {
@@ -54,7 +59,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         cssClass: eff.disabled ? "toggle" : "togle active",
                         description: eff.name,
                         encodedValue: ['effects', eff.id].join(this.delimiter),
-                        info2: { text: coreModule.api.Utils.i18n('SWADE.Dur')+": "+eff.duration.label }
+                        info2: { text: group.id == 'effectstemp' ? coreModule.api.Utils.i18n('SWADE.Dur')+": "+eff.duration.label : '' }
                     }], group);
                 }
 

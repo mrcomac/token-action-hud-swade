@@ -112,8 +112,20 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 await this.token.toggleEffect(data, { active: !existsOnActor });
                 
             } else {
-                let effect = this.token.actor.effects.filter(el => el.id === actionId)[0]
-                await this.token.actor.effects.filter(el => el.id === actionId)[0].update({ disabled: !effect.disabled })
+                let effect = this.token.actor.effects.filter(el => el.id === actionId)
+                console.log(effect)
+                if(effect.length == 0) {
+                    const items = Array.from(this.actor.items.filter(it => ['edge', 'hindrance', 'ability'].includes(it.type)))
+                    items.forEach(async (item) => {
+                        let _eff = item.effects.filter(el => el.id === actionId)
+                        if(_eff.length > 0) 
+                            await _eff[0].update({ disabled: !_eff[0].disabled })
+                    })
+                } else {
+                    await this.token.actor.effects.filter(el => el.id === actionId)[0].update({ disabled: !effect[0].disabled })
+                }
+
+                
             }
             game.tokenActionHud.update()
         }
