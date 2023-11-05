@@ -3,7 +3,7 @@ export let SavageRollHandler = null
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     SavageRollHandler = class SavageRollHandler extends coreModule.api.RollHandler {
         
-        async doHandleActionEvent(event, encodedValue) {
+        async handleActionClick(event, encodedValue) {
             let payload = encodedValue.split("|");
 
             let macroType = payload[0];
@@ -14,7 +14,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
             let hasSheet = ["item"];
             if (this.isRenderItem() && hasSheet.includes(macroType)) {
-                return this.doRenderItem(tokenId, actionId);
+                return this.renderItem(tokenId, actionId);
             }
 
             switch (macroType) {

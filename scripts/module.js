@@ -21,7 +21,7 @@ function chatItem(message,actor) {
 Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
     SavageSystemManager = class SavageSystemManager extends coreModule.api.SystemManager {
         /** @override */
-        doGetActionHandler() {
+        getActionHandler() {
             return new SavageActionHandler()
         }
 
@@ -44,7 +44,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @override */
-        doGetRollHandler(handlerId) {
+        getRollHandler(handlerId) {
             let rollHandler
             switch (handlerId) {
                 case 'betterrolls-swade2':
@@ -204,7 +204,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
     const module = game.modules.get('token-action-hud-swade');
     module.api = {
-        requiredCoreModuleVersion: '1.4',
+        requiredCoreModuleVersion: '1.5',
         SystemManager: SavageSystemManager
     }
     Hooks.call('tokenActionHudSystemReady', module)
