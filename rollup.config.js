@@ -5,8 +5,7 @@ export default [
     {
         input: {
             include: [
-                'scripts/*.js',
-                'scripts/*/*.js'
+                'scripts/*.js'
             ]
         },
         output: {
