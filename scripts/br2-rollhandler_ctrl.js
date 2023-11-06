@@ -6,9 +6,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                
         /** @override */
         _rollItem(event, actionId) {
-            console.log("THE EVENT")
-            console.log(event)
-            let behavior;
+            let behavior = game.settings.get("betterrolls-swade2", "ctrl_click");
             
             const item = this.token.actor.items.filter(el => el.id === actionId)[0];
 
@@ -16,17 +14,6 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 item.show()
                 return
             }
-
-            if (event.ctrlKey === true) {
-                behavior = game.settings.get("betterrolls-swade2", "ctrl_click");
-            } else if (event.altKey === true) {
-                behavior = game.settings.get("betterrolls-swade2", "alt_click");
-            } else if (event.shiftKey === true) {
-                behavior = game.settings.get("betterrolls-swade2", "shift_click");
-            } else {
-                behavior = game.settings.get("betterrolls-swade2", "click");
-            }
-            
             if (behavior === "trait") {
                 game.brsw
                     .create_item_card(this.token, actionId)
@@ -48,16 +35,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /** @override */
         _rollAttribute(event, actionId) {
-            let behavior;
-            if (event.ctrlKey === true) {
-                behavior = game.settings.get("betterrolls-swade2", "ctrl_click");
-            } else if (event.altKey === true) {
-                behavior = game.settings.get("betterrolls-swade2", "alt_click");
-            } else if (event.shiftKey === true) {
-                behavior = game.settings.get("betterrolls-swade2", "shift_click");
-            } else {
-                behavior = game.settings.get("betterrolls-swade2", "click");
-            }
+            let behavior = game.settings.get("betterrolls-swade2", "ctrl_click");
             if (behavior === "trait" || behavior === "trait_damage") {
                 game.brsw
                     .create_atribute_card(this.token, actionId)

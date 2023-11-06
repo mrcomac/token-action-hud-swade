@@ -27,12 +27,12 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
         getAvailableRollHandlers() {
             let coreTitle = "swade"
-
-            
-
             let choices = { core: "Core SWADE" }
             if (coreModule.api.Utils.isModuleActive('betterrolls-swade2')) {
                 SavageSystemManager.addHandler(choices, "betterrolls-swade2")
+                SavageSystemManager.addHandler(choices, "betterrolls-swade2-crtl")
+                SavageSystemManager.addHandler(choices, "betterrolls-swade2-shift")
+                SavageSystemManager.addHandler(choices, "betterrolls-swade2-alt")
             } else if(coreModule.api.Utils.isModuleActive('swade-tools')) {
                 SavageSystemManager.addHandler(choices, "swade-tools")
             } else {
