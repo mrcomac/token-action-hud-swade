@@ -1,6 +1,5 @@
-import commonjs from '@rollup/plugin-commonjs'
-import resolve from '@rollup/plugin-node-resolve'
-import terser from '@rollup/plugin-terser'
+import { terser } from 'rollup-plugin-terser'
+import multi from '@rollup/plugin-multi-entry'
 
 export default [
     {
@@ -10,18 +9,13 @@ export default [
                 'scripts/*/*.js'
             ]
         },
-        plugins: [
-            commonjs(),
-            resolve({ browser: true })
-        ],
         output: {
             format: 'esm',
-            file: 'dist/module.min.js',
-            generatedCode: { constBindings: true },
-            plugins: [
-                terser({ keep_classnames: true, keep_fnames: true })
-            ],
-            sourcemap: true
-        }
+            file: 'scripts/module.min.js'
+        },
+        plugins: [
+            terser({ keep_classnames: true, keep_fnames: true }),
+            multi()
+        ]
     }
 ]
