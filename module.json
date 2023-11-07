@@ -38,7 +38,7 @@
     ]
   },
   "esmodules": [
-    "./dist/module.min.js"
+    "./dist/token-action-hud-swade.min.js"
   ],
   "styles": [
     "styles/token-action-hud-swade.css"
