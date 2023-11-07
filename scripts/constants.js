@@ -6,6 +6,10 @@ export const ATTRIBUTE_ID = {
     'SWADE.AttrVig': "vigor"
 }
 
+export const MODULE = {
+    ID: "token-action-hud-swade"
+}
+
 export const MODULEDIR = 'modules/token-action-hud-swade/'
 export const IMG_DICE = MODULEDIR + 'assets/'
 export const SYSDIR = 'systems/swade/'
