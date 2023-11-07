@@ -10,7 +10,7 @@ export default [
         },
         output: {
             format: 'esm',
-            file: 'dist/module.min.js'
+            file: 'dist/token-action-hud-swade.min.js'
         },
         plugins: [
             terser({ keep_classnames: true, keep_fnames: true }),
