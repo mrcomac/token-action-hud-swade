@@ -10,7 +10,7 @@ export default [
         },
         output: {
             format: 'esm',
-            file: 'scripts/module.min.js'
+            file: 'dist/module.min.js'
         },
         plugins: [
             terser({ keep_classnames: true, keep_fnames: true }),
