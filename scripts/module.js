@@ -2,7 +2,7 @@ import { SavageActionHandler } from './action-handler.js'
 import { SavageRollHandler as CoreRoll } from './core-rollhandler.js'
 import { BR2RollHandler as BR2Roll } from './br2-rollhandler.js'
 import { SwadeToolsRollHandler } from './swadetools-rollhandler.js'
-import { MODULEDIR } from './constants.js'
+import * as systemSettings from './settings.js'
 
 export let SavageSystemManager = null
 
@@ -63,9 +63,9 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @override */
-        /*doRegisterSettings (updateFunc) {
+        registerSettings (updateFunc) {
             systemSettings.register(updateFunc)
-        }*/
+        }
 
         async doRegisterDefaultFlags() {
             const GROUP = {

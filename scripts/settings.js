@@ -11,10 +11,10 @@ export function register (updateFunc) {
             requiresReload: false,
             type: String,
             choices: {
-                "single": "Single click action",
-                "shift": "Shift click action",
-                "alt": "Alt click action",
-                "crtl": "Crtl click action"
+                "click": "Single click action",
+                "shift_click": "Shift click action",
+                "alt_click": "Alt click action",
+                "ctrl_click": "Crtl click action"
             },
             default: "single",
             onChange: (value) => {
