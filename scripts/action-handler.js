@@ -21,23 +21,23 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             })
 
             this._getUtilities({ id: "utility", type: 'system'})
-            this._getStatuses({ id: "statuses", type: 'system'})
             this._powerpoints({ id: 'powerpoints', type: 'system' })
-            this._effects()
-
-        }
-        _effects() {
-            let temporary = { id: 'effectstemp', type: 'system' }
-            let permanent = { id: 'effectsperm', type: 'system' }
-            let ignore = [
+            let default_statuses = [
                 coreModule.api.Utils.i18n('SWADE.Shaken'),
                 coreModule.api.Utils.i18n('SWADE.Distr'),
                 coreModule.api.Utils.i18n('SWADE.Vuln'),
                 coreModule.api.Utils.i18n('SWADE.Stunned'),
                 coreModule.api.Utils.i18n('SWADE.Entangled'),
                 coreModule.api.Utils.i18n('SWADE.Bound'),
-                coreModule.api.Utils.i18n('SWADE.Incap')
+                coreModule.api.Utils.i18n('SWADE.Incap'),
+                coreModule.api.Utils.i18n('SWADE.Prone')
             ]
+            this._effects(default_statuses)
+
+        }
+        _effects(default_statuses) {
+            let temporary = { id: 'effectstemp', type: 'system' }
+            let permanent = { id: 'effectsperm', type: 'system' }
 
             let effects = Array.from(this.actor.effects)
             const items = Array.from(this.actor.items.filter(it => ['edge', 'hindrance', 'ability'].includes(it.type)))
@@ -51,7 +51,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     group = permanent
                 }
                 
-                if(!ignore.includes(eff.name)) {
+                if(!default_statuses.includes(eff.name)) {
                     this.addActions([{
                         id:'ef'+eff.name,
                         name: eff.name,
@@ -64,6 +64,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
 
             })
+            this._getStatuses({ id: 'statuses', type: 'system' }, default_statuses)
         }
         _powerpoints(parent) {
             if((this.actor.items.filter(i => i.type === 'power')).length == 0) return;
@@ -278,23 +279,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             this.addActions(actions, parent);
 
         }
-        _getStatuses(parent) {
+        _getStatuses(parent, default_statuses) {
             let actions = [];
-            ['Shaken', 'Distr', 'Vuln', 'Stunned', 'Entangled', 'Bound', 'Incap'].forEach(el => {
-                let fullname = coreModule.api.Utils.i18n('SWADE.'+el)
-                //let img = ICONSDIR+"/status/status_"+fullname.toLocaleLowerCase()+".svg";
-                let img = CONFIG.statusEffects.find((el) => el.id === fullname.toLocaleLowerCase())?.icon ?? null;
-                //if(el == "Incap") img = "systems/swade/assets/ui/incapacitated.svg";
+            default_statuses.forEach(_status => {
+                let img = CONFIG.statusEffects.find((el) => el.id ===_status.toLowerCase())?.icon ?? null;
                 
-                let en = this.actor.statuses.has(fullname.toLowerCase()) ? "remove" : "add";
                 let action =  {
-                    id: fullname.toLowerCase(),
-                    name: fullname,
-                    cssClass: this.actor.statuses.has(fullname.toLowerCase()) ? "toggle active" : "togle",
+                    id: _status.toLowerCase(),
+                    name: _status,
+                    cssClass: this.actor.statuses.has(_status.toLowerCase()) ? "toggle active" : "togle",
                     img: img,
-                    description: fullname,
-                    encodedValue: ['statuses', fullname].join(this.delimiter)
-                    //info1: { text: String(this.actor.system.wounds.value) }
+                    description: _status,
+                    encodedValue: ['statuses', _status].join(this.delimiter)
                 }
                 actions.push(action)
             })

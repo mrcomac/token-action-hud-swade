@@ -108,12 +108,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if(event != "effects") {
                 const existsOnActor = this.token.actor.statuses.has(actionId.toLowerCase())
                 const data = game.swade.util.getStatusEffectDataById(actionId.toLowerCase());
-                data["flags.core.statusId"] = actionId;
+                data["flags.core.statusId"] = actionId.toLowerCase();
                 await this.token.toggleEffect(data, { active: !existsOnActor });
                 
             } else {
                 let effect = this.token.actor.effects.filter(el => el.id === actionId)
-                console.log(effect)
                 if(effect.length == 0) {
                     const items = Array.from(this.actor.items.filter(it => ['edge', 'hindrance', 'ability'].includes(it.type)))
                     items.forEach(async (item) => {

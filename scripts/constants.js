@@ -7,7 +7,7 @@ export const ATTRIBUTE_ID = {
 }
 
 export const MODULE = {
-    ID: "token-action-hud-swade"
+    ID: "token-action-hud-swade-development"
 }
 
 export const MODULEDIR = 'modules/token-action-hud-swade/'
