@@ -89,7 +89,8 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 benny: { id: 'benny', name: coreModule.api.Utils.i18n('SWADE.Rolls.Benny'), type: 'system' },
                 statuses: { id: 'statuses', name: coreModule.api.Utils.i18n('SWADE.Status'), type: 'system' },
                 effectsperm: { id: 'effectsperm', name: coreModule.api.Utils.i18n('SWADE.EffectsPermanent'), type: 'system' },
-                effectstemp: { id: 'effectstemp', name: coreModule.api.Utils.i18n('SWADE.EffectsTemporary'), type: 'system' }
+                effectstemp: { id: 'effectstemp', name: coreModule.api.Utils.i18n('SWADE.EffectsTemporary'), type: 'system' },
+                // activeeffects: { id: 'activeeffects', name: "Active Effects ("+coreModule.api.Utils.i18n('TYPES.Item.gear')+")", type: 'system' },
                 
             }
             const groups = GROUP
@@ -202,7 +203,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
     /* STARTING POINT */
 
-    const module = game.modules.get('token-action-hud-swade-development');
+    const module = game.modules.get('token-action-hud-swade');
     module.api = {
         requiredCoreModuleVersion: '1.5',
         SystemManager: SavageSystemManager
