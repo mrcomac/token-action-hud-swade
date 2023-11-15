@@ -47,7 +47,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 game.brsw
                     .create_atribute_card(this.token, actionId)
                     .then((message) => {
-                        game.brsw.roll_attribute(message, $(message.content), false);
+                        game.brsw.roll_attribute(message, false);
                     });
             } else if (behavior === "system") {
                 this.token.actor.rollAttribute(actionId);
@@ -66,7 +66,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 game.brsw
                     .create_skill_card(this.token, actionId)
                     .then((message) => {
-                        game.brsw.roll_skill(message, $(message.content), false);
+                        game.brsw.roll_skill(message, false);
                     });
             } else if (behavior === "system") {
                 game.swade.rollItemMacro(this.token.actor.items.get(actionId).name);
