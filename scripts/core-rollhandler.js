@@ -18,6 +18,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             }
 
             switch (macroType) {
+                case "ae":
+                    const item = this.token.actor.items.filter(el => el.id === payload[3])[0];
+                    let disabled = true;
+                    if(payload[2] == 'true') disabled = false;
+                    const updates = {
+                        _id: actionId,
+                        disabled: disabled,
+                      };
+              
+                    item.updateEmbeddedDocuments('ActiveEffect', [updates]);
+                    Hooks.callAll("forceUpdateTokenActionHud");
+                    break;
                 case "actions":
                 case "item":
                 case "weapons":

@@ -42,7 +42,6 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             let behavior;
             const key_option = game.settings.get(MODULE.ID, "br2RollsBehaviour");
             behavior = game.settings.get("betterrolls-swade2", key_option);
-            behavior = game.settings.get("betterrolls-swade2", "ctrl_click");
 
             if (behavior === "trait" || behavior === "trait_damage") {
                 game.brsw
@@ -61,7 +60,6 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
         _rollSkill(event, actionId) {
             let behavior;
             const key_option = game.settings.get(MODULE.ID, "br2RollsBehaviour");
-            console.group(key_option)
             behavior = game.settings.get("betterrolls-swade2", key_option);
 
             if (behavior === "trait" || behavior === "trait_damage") {

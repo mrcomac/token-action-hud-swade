@@ -81,6 +81,11 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 gears: { id: 'gears', name: coreModule.api.Utils.i18n('TYPES.Item.gear'), type: 'system' },
                 gearsfavorite: { id: 'gearsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess')+"-"+coreModule.api.Utils.i18n('TYPES.Item.gear'), type: 'system' },
                 weapons: { id: 'weapons', name: coreModule.api.Utils.i18n('SWADE.Weapons'), type: 'system' },
+                weapons_ae: { id: 'weapons_ae', name: "Active Effects", type: 'system' },
+                armorsfavorite: { id: 'armorsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess')+"-"+coreModule.api.Utils.i18n('SWADE.Armors')+"&"+coreModule.api.Utils.i18n('SWADE.Shields'), type: 'system' },
+                armors: { id: 'armor', name: coreModule.api.Utils.i18n('SWADE.Armors'), type: 'system' },
+                shields: { id: 'shield', name: coreModule.api.Utils.i18n('SWADE.Shields'), type: 'system' },
+                armors_ae: { id: 'armors_ae', name: "Active Effects", type: 'system' },
                 weaponsfavorite: { id: 'weaponsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess')+"-"+coreModule.api.Utils.i18n('SWADE.Weapons'), type: 'system' },
                 actions: { id: 'actions', name: coreModule.api.Utils.i18n('SWADE.Actions'), type: 'system' },
                 actionsfavorite: { id: 'actionsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess')+"-"+coreModule.api.Utils.i18n('SWADE.Actions'), type: 'system' },
@@ -89,9 +94,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 benny: { id: 'benny', name: coreModule.api.Utils.i18n('SWADE.Rolls.Benny'), type: 'system' },
                 statuses: { id: 'statuses', name: coreModule.api.Utils.i18n('SWADE.Status'), type: 'system' },
                 effectsperm: { id: 'effectsperm', name: coreModule.api.Utils.i18n('SWADE.EffectsPermanent'), type: 'system' },
-                effectstemp: { id: 'effectstemp', name: coreModule.api.Utils.i18n('SWADE.EffectsTemporary'), type: 'system' },
-                // activeeffects: { id: 'activeeffects', name: "Active Effects ("+coreModule.api.Utils.i18n('TYPES.Item.gear')+")", type: 'system' },
-                
+                effectstemp: { id: 'effectstemp', name: coreModule.api.Utils.i18n('SWADE.EffectsTemporary'), type: 'system' }
             }
             const groups = GROUP
             Object.values(groups).forEach(group => {
@@ -156,12 +159,24 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                         ]
                     },
                     {
+                        nestId: 'armors',
+                        id: 'armors',
+                        name: coreModule.api.Utils.i18n('SWADE.Armors')+" & "+coreModule.api.Utils.i18n('SWADE.Shields'),
+                        groups: [
+                            { ...groups.armorsfavorite, nestId: 'armors_armorsfavorite' },
+                            { ...groups.armors, nestId: 'armors_armors' },
+                            { ...groups.shields, nestId: 'armors_shields' },
+                            { ...groups.armors_ae, nestId: 'armors_armorsae' }
+                        ]
+                    },
+                    {
                         nestId: 'weapons',
                         id: 'weapons',
                         name: coreModule.api.Utils.i18n('SWADE.Weapons'),
                         groups: [
                             { ...groups.weaponsfavorite, nestId: 'weapons_weaponsfavorite' },
-                            { ...groups.weapons, nestId: 'weapons_weapons' }
+                            { ...groups.weapons, nestId: 'weapons_weapons' },
+                            { ...groups.weapons_ae, nestId: 'weapons_weaponsae' }
                         ]
                     },
                     {

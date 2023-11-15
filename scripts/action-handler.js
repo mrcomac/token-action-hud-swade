@@ -19,6 +19,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
                 this._getItems({ id: element, type: 'system' }, element.slice(0, -1))
             })
+            this._getArmorShield();
 
             this._getUtilities({ id: "utility", type: 'system'})
             this._powerpoints({ id: 'powerpoints', type: 'system' })
@@ -33,7 +34,24 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 coreModule.api.Utils.i18n('SWADE.Prone')
             ]
             this._effects(default_statuses)
+        }
+        _activeEffects(parent, category) {
+            const items = Array.from(this.actor.items.filter(it => [category].includes(it.type)))
 
+            items.forEach(item => {
+                const effects = Array.from(item.effects)
+                effects.forEach(effect => {
+                    this.addActions([{
+                        id:'ac'+effect.id,
+                        name: effect.name,
+                        img: effect.icon,
+                        cssClass: effect.disabled ? "toggle" : "togle active",
+                        description: effect.name,
+                        encodedValue: ['ae', effect.id,effect.disabled,item.id].join(this.delimiter),
+                        info2: { text: item.type+": "+item.name }
+                    }], parent);
+                })
+            })
         }
         _effects(default_statuses) {
             let temporary = { id: 'effectstemp', type: 'system' }
@@ -143,6 +161,37 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             })
             this.addActions(items, parent)
             this.addActions(items_favorities, { id: parent.id + 'favorite', type: parent.type })
+            if(['weapon'].includes(itemtype))
+                this._activeEffects({id: parent.id+"_ae", type: parent.type},itemtype)
+        }
+        _getArmorShield() {
+           
+            const favorite = { id: 'armorsfavorite', type: 'system' }
+            const item_ae = { id: 'armors_ae', type: 'system' }
+            const iterable = ['armor', 'shield']
+            iterable.forEach(itemType => {
+                let items = []
+                let items_favorities = []
+                let item_cat = { id: itemType, type: 'system' }
+                let item_list = this.actor.items.filter(i => i.type === itemType)
+                item_list.forEach(el => {
+                    let element = {
+                        id: el.id,
+                        img: el.img,
+                        name: el.name,
+                        description: el.system.description,
+                        encodedValue: [parent.id, el.id, el.id].join(this.delimiter)
+                    }
+                    if (el.system.favorite == true) {
+                        items_favorities.push(element)
+                    } else {
+                        items.push(element)
+                    }
+                })
+                this.addActions(items, item_cat)
+                this.addActions(items_favorities, favorite)
+                this._activeEffects(item_ae, itemType)
+            })  
         }
         _getSkills(parent) {
 
