@@ -4,20 +4,24 @@ export let BR2RollHandler = null
 
 Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
     BR2RollHandler = class BR2RollHandler extends SavageRollHandler  {
-               
+        
+        _get_behaviour(event) {
+            let key_option = game.settings.get(MODULE.ID, "br2RollsBehaviour");
+            if(event.ctrlKey) key_option = 'ctrl_click';
+            else if(event.altKey) key_option = 'alt_click';
+            else if(event.shiftKet) key_option = 'shift_click';
+            return game.settings.get("betterrolls-swade2", key_option);
+        }
         /** @override */
-        _rollItem(event, actionId) {
-            let behavior;
-            
+        _rollItem(event, actionId) {            
             const item = this.token.actor.items.filter(el => el.id === actionId)[0];
 
             if(item.type === 'consumable') {
                 item.show()
                 return
             }
-            const key_option = game.settings.get(MODULE.ID, "br2RollsBehaviour");
-            behavior = game.settings.get("betterrolls-swade2", key_option);
-            
+            const behavior = this._get_behaviour(event);
+
             if (behavior === "trait") {
                 game.brsw
                     .create_item_card(this.token, actionId)
@@ -32,6 +36,11 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     });
             } else if (behavior === "system") {
                 game.swade.rollItemMacro(this.token.actor.items.get(actionId).name);
+            } else if(behavior == 'dialog'){
+                game.brsw.create_item_card(this.token, actionId).then(br_card => {
+                    game.brsw.dialog.show_card(br_card);
+                })
+                
             } else {
                 game.brsw.create_item_card(this.token, actionId);
             }
@@ -39,9 +48,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /** @override */
         _rollAttribute(event, actionId) {
-            let behavior;
-            const key_option = game.settings.get(MODULE.ID, "br2RollsBehaviour");
-            behavior = game.settings.get("betterrolls-swade2", key_option);
+            const behavior = this._get_behaviour(event);
 
             if (behavior === "trait" || behavior === "trait_damage") {
                 game.brsw
@@ -51,6 +58,11 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     });
             } else if (behavior === "system") {
                 this.token.actor.rollAttribute(actionId);
+            } else if(behavior == 'dialog'){
+                game.brsw.create_atribute_card(this.token, actionId).then(br_card => {
+                    game.brsw.dialog.show_card(br_card);
+                })
+                
             } else {
                 game.brsw.create_atribute_card(this.token, actionId);
             }
@@ -58,9 +70,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /** @override */
         _rollSkill(event, actionId) {
-            let behavior;
-            const key_option = game.settings.get(MODULE.ID, "br2RollsBehaviour");
-            behavior = game.settings.get("betterrolls-swade2", key_option);
+            const behavior = this._get_behaviour(event);
 
             if (behavior === "trait" || behavior === "trait_damage") {
                 game.brsw
@@ -70,6 +80,11 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     });
             } else if (behavior === "system") {
                 game.swade.rollItemMacro(this.token.actor.items.get(actionId).name);
+            } else if(behavior == 'dialog'){
+                game.brsw.create_skill_card(this.token, actionId).then(br_card => {
+                    game.brsw.dialog.show_card(br_card);
+                })
+                
             } else {
                 game.brsw.create_skill_card(this.token, actionId);
             }

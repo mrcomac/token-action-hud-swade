@@ -3,7 +3,6 @@ import { SavageRollHandler as CoreRoll } from './core-rollhandler.js'
 import { BR2RollHandler as BR2Roll } from './br2-rollhandler.js'
 import { SwadeToolsRollHandler } from './swadetools-rollhandler.js'
 import * as systemSettings from './settings.js'
-
 export let SavageSystemManager = null
 
 export let DEFAULTS = null
@@ -67,7 +66,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             systemSettings.register(updateFunc)
         }
 
-        async doRegisterDefaultFlags() {
+        async registerDefaults() {
             const GROUP = {
                 utility: { id: 'utility', name: coreModule.api.Utils.i18n('SWADE.General'), type: 'system' },
                 attributes: { id: 'attributes', name: coreModule.api.Utils.i18n('SWADE.Attributes'), type: 'system' },
