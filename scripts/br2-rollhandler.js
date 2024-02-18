@@ -13,36 +13,36 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             return game.settings.get("betterrolls-swade2", key_option);
         }
         /** @override */
-        _rollItem(event, actionId) {            
-            const item = this.token.actor.items.filter(el => el.id === actionId)[0];
+        async _rollItem(event, actionId, actor) {            
+            const item = actor.items.filter(el => el.id === actionId)[0];
 
             if(item.type === 'consumable') {
-                item.show()
+                await item.show()
                 return
             }
             const behavior = this._get_behaviour(event);
 
             if (behavior === "trait") {
-                game.brsw
-                    .create_item_card(this.token, actionId)
+                await game.brsw
+                    .create_item_card(actor, actionId)
                     .then((message) => {
                         game.brsw.roll_item(message, $(message.content), false);
                     });
             } else if (behavior === "trait_damage") {
-                game.brsw
+                await game.brsw
                     .create_item_card(this.token, actionId)
                     .then((message) => {
                         game.brsw.roll_item(message, $(message.content), false, true);
                     });
             } else if (behavior === "system") {
-                game.swade.rollItemMacro(this.token.actor.items.get(actionId).name);
+                await game.swade.rollItemMacro(actor.items.get(actionId).name);
             } else if(behavior == 'dialog'){
-                game.brsw.create_item_card(this.token, actionId).then(br_card => {
+                await game.brsw.create_item_card(actor, actionId).then(br_card => {
                     game.brsw.dialog.show_card(br_card);
                 })
                 
             } else {
-                game.brsw.create_item_card(this.token, actionId);
+                await game.brsw.create_item_card(actor, actionId);
             }
         }
 

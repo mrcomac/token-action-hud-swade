@@ -42,8 +42,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         const weaponToCopy = this.actor.items.filter(item => item.id === actionId)[0]
                         let itemData = duplicate(weaponToCopy);
                         const item = await driver.createEmbeddedDocuments("Item", [itemData]);
-                        this._rollItem(event, item[0].id, driver)
-                        driver.deleteEmbeddedDocuments("Item", [item[0].id]);
+                        await this._rollItem(event, item[0].id, driver)
+                        // allow BR2 to roll from the card
+                        setTimeout(function(){ driver.deleteEmbeddedDocuments("Item", [item[0].id]); }, 60000);
+                        
                     } else {
                         this._rollItem(event, actionId,this.token.actor);
                     }
@@ -124,9 +126,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @private */
-        _rollItem(event, actionId, actor) {
-            const item = actor.actor.items.filter(el => el.id === actionId)[0];
-            item.show();
+        async _rollItem(event, actionId, actor) {
+            const item = actor.items.filter(el => el.id === actionId)[0];
+            await item.show();
         }
 
         /** @private */
