@@ -69,24 +69,24 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @override */
-        _rollSkill(event, actionId) {
+        _rollSkill(event, actionId, actor) {
             const behavior = this._get_behaviour(event);
 
             if (behavior === "trait" || behavior === "trait_damage") {
                 game.brsw
-                    .create_skill_card(this.token, actionId)
+                    .create_skill_card(actor, actionId)
                     .then((message) => {
                         game.brsw.roll_skill(message, false);
                     });
             } else if (behavior === "system") {
-                game.swade.rollItemMacro(this.token.actor.items.get(actionId).name);
+                game.swade.rollItemMacro(actor.items.get(actionId).name);
             } else if(behavior == 'dialog'){
-                game.brsw.create_skill_card(this.token, actionId).then(br_card => {
+                game.brsw.create_skill_card(actor, actionId).then(br_card => {
                     game.brsw.dialog.show_card(br_card);
                 })
                 
             } else {
-                game.brsw.create_skill_card(this.token, actionId);
+                game.brsw.create_skill_card(actor, actionId);
             }
         }
 

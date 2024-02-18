@@ -68,7 +68,8 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
         async registerDefaults() {
             const GROUP = {
-                utility: { id: 'utility', name: coreModule.api.Utils.i18n('SWADE.General'), type: 'system' },
+                //utility: { id: 'utility', name: coreModule.api.Utils.i18n('SWADE.General'), type: 'system' },
+                vehicledriver: { id: 'vehicledriver', name: coreModule.api.Utils.i18n('SWADE.Operator'), type: 'system' },
                 attributes: { id: 'attributes', name: coreModule.api.Utils.i18n('SWADE.Attributes'), type: 'system' },
                 derivedstats: { id: 'derivedstats', name: coreModule.api.Utils.i18n('SWADE.Derived'), type: 'system' },
                 skills: { id: 'skills', name: coreModule.api.Utils.i18n('SWADE.Skills'), type: 'system' },
@@ -103,12 +104,20 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             const groupsArray = Object.values(groups)
             DEFAULTS = {
                 layout: [
+                    /*{
+                        nestId: 'vehicle',
+                        id: 'vehicle',
+                        name: coreModule.api.Utils.i18n('SWADE.TYPES.Actor.vehicle'),
+                        groups: [
+                            { ...groups.vehicledriver, nestId: 'vehicledriver' },
+                        ]
+                    },*/
                     {
                         nestId: 'utility',
                         id: 'utility',
                         name: coreModule.api.Utils.i18n('SWADE.General'),
                         groups: [
-                            { ...groups.utility, nestId: 'utility_utility' },
+                            //{ ...groups.utility, nestId: 'utility_utility' },
                             { ...groups.benny, nestId: 'utility_benny' }
                         ]
                     },

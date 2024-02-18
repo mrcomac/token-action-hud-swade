@@ -6,8 +6,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     SwadeToolsRollHandler = class SwadeToolsRollHandler extends SavageRollHandler {
 
         /** @override */
-        _rollItem(event, actionId) {
-            game.swadetools.item(this.token.actor,actionId)
+        _rollItem(event, actionId, actor) {
+            game.swadetools.item(actor,actionId)
         }
 
         /** @override */
@@ -16,8 +16,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @override */
-        async _rollSkill(event, actionId) {
-            await game.swadetools.skill(this.token.actor,actionId)
+        async _rollSkill(event, actionId, actor) {
+            await game.swadetools.skill(actor,actionId)
         }
 
         /** @override */

@@ -13,27 +13,29 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const actor = this.actor;
             if (!actor) return;
 
-            this._getAttributes({ id: 'attributes', type: 'system' });
-            this._getSkills({ id: 'skills', type: 'system' });
-            ["powers", "weapons", 'consumables', 'gears', 'actions'].forEach(element => {
+            if(["npc", "character"].includes(actor.type)) {
 
-                this._getItems({ id: element, type: 'system' }, element.slice(0, -1))
-            })
-            this._getArmorShield();
+                this._getAttributes({ id: 'attributes', type: 'system' });
+                this._getSkills({ id: 'skills', type: 'system' });
+                ["powers", "weapons", 'consumables', 'gears', 'actions'].forEach(element => {
 
-            this._getUtilities({ id: "utility", type: 'system'})
-            this._powerpoints({ id: 'powerpoints', type: 'system' })
-            let default_statuses = [
-                coreModule.api.Utils.i18n('SWADE.Shaken'),
-                coreModule.api.Utils.i18n('SWADE.Distr'),
-                coreModule.api.Utils.i18n('SWADE.Vuln'),
-                coreModule.api.Utils.i18n('SWADE.Stunned'),
-                coreModule.api.Utils.i18n('SWADE.Entangled'),
-                coreModule.api.Utils.i18n('SWADE.Bound'),
-                coreModule.api.Utils.i18n('SWADE.Incap'),
-                coreModule.api.Utils.i18n('SWADE.Prone')
-            ]
-            this._effects(default_statuses)
+                    this._getItems({ id: element, type: 'system' }, element.slice(0, -1))
+                })
+                this._getArmorShield();
+
+                this._getUtilities({ id: "utility", type: 'system'})
+                this._powerpoints({ id: 'powerpoints', type: 'system' })
+                let default_statuses = []
+                CONFIG.statusEffects.forEach(item => {
+                    default_statuses.push(item.id)
+                    })
+                this._effects(default_statuses)
+            } else if (actor.type == "vehicle") {
+                ["weapons"].forEach(element => {
+                    this._getSkills({ id: 'skills', type: 'system' });
+                    this._getItems({ id: element, type: 'system' }, element.slice(0, -1))
+                })
+            }
         }
         _activeEffects(parent, category) {
             const items = Array.from(this.actor.items.filter(it => [category].includes(it.type)))
@@ -193,21 +195,41 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 this._activeEffects(item_ae, itemType)
             })  
         }
-        _getSkills(parent) {
+        async _getSkills(parent) {
+            const tokenType = this.actor.type;
 
-            let skills = this.actor.items.filter(i => i.type === "skill")
-            let actions = skills.map(element => {
-                return {
-                    id: element.id,
-                    name: element.name,
-                    img: element.img,
-                    description: element.system.description,
-                    encodedValue: ['skills', element.id].join(this.delimiter),
-                    info1: { text: SavageActionHandler._buildDieString(element.system.die) }
+            if(tokenType == "vehicle") {
+                const driver = await fromUuid(this.actor.system.driver.id)
+                let skill = driver.items.filter(item => item.name === this.actor.system.driver.skill)
+                if(skill.length === 0) {
+                    skill = driver.items.filter(item=>item.type==="skill" && item.system.die.sides === 4 && item.system.die.modifier === -2)[0]
+                } else {
+                    skill = skill[0]
                 }
+                this.addActions([{
+                    id: this.actor.id,
+                    name: coreModule.api.Utils.i18n("ManCheck"),
+                    img: "systems/swade/assets/icons/skills/steering-wheel.svg",
+                    description: "",
+                    encodedValue: ['maneuver', skill.id].join(this.delimiter),
+                    info1: { text: SavageActionHandler._buildDieString(skill.system.die) }
+                }], parent)
 
-            });
-            this.addActions(actions, parent)
+            } else {
+                let skills = this.actor.items.filter(i => i.type === "skill")
+                let actions = skills.map(element => {
+                    return {
+                        id: element.id,
+                        name: element.name,
+                        img: element.img,
+                        description: element.system.description,
+                        encodedValue: ['skills', element.id].join(this.delimiter),
+                        info1: { text: SavageActionHandler._buildDieString(element.system.die) }
+                    }
+
+                });
+                this.addActions(actions, parent)
+            }
         }
         _getAttributes(parent) {
             //this.addGroup( { id: 'derivedstats', name: coreModule.api.Utils.i18n('SWADE.Derived'), type: 'system' },{id :'attributes', type: 'custom'})

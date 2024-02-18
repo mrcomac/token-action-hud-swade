@@ -36,7 +36,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 case "gears":
                 case "consumables":
                 case "powers":
-                    this._rollItem(event, actionId);
+                    const tokenType = this.actor.type;
+                    if(tokenType == "vehicle" && macroType === "weapons") {
+                        const driver = await fromUuid(this.actor.system.driver.id)
+                        const weaponToCopy = this.actor.items.filter(item => item.id === actionId)[0]
+                        let itemData = duplicate(weaponToCopy);
+                        const item = await driver.createEmbeddedDocuments("Item", [itemData]);
+                        this._rollItem(event, item[0].id, driver)
+                        driver.deleteEmbeddedDocuments("Item", [item[0].id]);
+                    } else {
+                        this._rollItem(event, actionId,this.token.actor);
+                    }
                     break;
                 case "effects":
                 case "statuses":
@@ -55,7 +65,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this._run();
                     break;
                 case "skills":
-                    this._rollSkill(event, actionId);
+                    this._rollSkill(event, actionId, this.token.actor);
                     break;
                 case "utility":
                     if (actionId === "endTurn") {
@@ -68,6 +78,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     if(actionId != "NONE")
                         this._wounds(macroType,actor,actionId)
                 break;
+                case "maneuver":
+                    const driver = await fromUuid(this.actor.system.driver.id)
+                    this._rollSkill(event, actionId, driver);
+                    break;
             }
         }
 
@@ -110,8 +124,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @private */
-        _rollItem(event, actionId) {
-            const item = this.token.actor.items.filter(el => el.id === actionId)[0];
+        _rollItem(event, actionId, actor) {
+            const item = actor.actor.items.filter(el => el.id === actionId)[0];
             item.show();
         }
 
@@ -171,8 +185,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         /** @private */
-        _rollSkill(event, actionId) {
-            this.token.actor.rollSkill(actionId, { event: event });
+        _rollSkill(event, actionId, actor) {
+            actor.rollSkill(actionId, { event: event });
         }
 
         /** @private */
