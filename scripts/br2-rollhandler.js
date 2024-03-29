@@ -10,7 +10,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             if(event.ctrlKey) key_option = 'ctrl_click';
             else if(event.altKey) key_option = 'alt_click';
             else if(event.shiftKet) key_option = 'shift_click';
-            return game.settings.get("betterrolls-swade2", key_option);
+            return game.brsw.get_action_from_click(key_option); //game.settings.get("betterrolls-swade2", key_option);
         }
         /** @override */
         async _rollItem(event, actionId, actor) {            
