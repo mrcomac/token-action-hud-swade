@@ -5,7 +5,7 @@
   "version": "placeholder",
   "compatibility": {
     "minimum": "11",
-    "verified": "11.306",
+    "verified": "11.315",
     "maximum": ""
   },
   "authors": [
@@ -42,6 +42,13 @@
   ],
   "styles": [
     "styles/token-action-hud-swade.css"
+  ],
+  "languages": [
+    {
+        "lang": "en",
+        "name": "English",
+        "path": "languages/en.json"
+    }
   ],
   "url": "https://github.com/mrcomac/token-action-hud-swade",
   "manifest": "https://github.com/mrcomac/token-action-hud-swade/releases/latest/download/module.json",

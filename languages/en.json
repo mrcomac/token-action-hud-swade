@@ -1,0 +1,83 @@
+{
+    "tokenActionHud": {
+        "swade": {
+            "main-actions": "Main Actions (up to 3 actions)",
+            "free-actions": "Free Actions",
+            "helpme": "Help Me",
+            "actions": {
+                "attack": {
+                    "name": "Attack",
+                    "description": "Perform a melee or ranged attack using a weapon against an opponent."
+                },
+                "multi-action": {
+                    "name": "Multi Action",
+                    "description": "Execute up to three actions in one turn, with penalties: -2 for two actions, -4 for three actions."
+                },
+                "wild-attack": {
+                    "name": "Wild Attack",
+                    "description": "Increase Fighting by +2 and melee damage by +2, at the cost of becoming Vulnerable to attacks."
+                },
+                "desperate-attack": {
+                    "name": "Desperate Attack",
+                    "description": "Increase your Fighting skill by +2 or +4 while reducing melee damage by -2 or -4 respectively."
+                },
+                "called-shot": {
+                    "name": "Called Shot",
+                    "description": "Aim at a specific body part with varying difficulty: Limbs (-2, potential disarm), Hands (-4, potential disarm), Head/Vitals (-4, adds +4 damage), Unarmored Area (ignores Armor, penalty varies)."
+                },
+                "aim": {
+                    "name": "Aim",
+                    "description": "Focus on a target for a full turn, negating up to 4 penalty points from factors like cover or range, or add +2 to your first ranged attack next round."
+                },
+                "push": {
+                    "name": "Push",
+                    "description": "Make an opposed Strength or Athletics roll to push an opponent 1” (2” with a raise). Add +2 if you moved 2” beforehand. Opponents can roll Athletics at -2 to resist falling prone."
+                },
+                "grapple": {
+                    "name": "Grapple",
+                    "description": "Engage in an opposed Athletics roll to Entangle an opponent, or Bound them (also making yourself Vulnerable) with a raise."
+                },
+                "defend": {
+                    "name": "Defend",
+                    "description": "Dedicate your turn to defense to gain +4 Parry. Move up to your pace without triggering free attacks, but running is not allowed."
+                },
+                "support": {
+                    "name": "Support",
+                    "description": "Assist an ally's trait roll by describing your help and rolling your relevant skill: +1 on a success, +2 on a raise, up to a maximum of +4."
+                },
+                "test": {
+                    "name": "Test",
+                    "description": "Challenge an opponent by describing a test and rolling a relevant skill against their attribute. Success: foe is Distracted or Vulnerable (your choice). Raise: foe is also Shaken."
+                },
+                "reload": {
+                    "name": "Reload",
+                    "description": "Reload your weapon, which typically takes one action. Time varies by weapon type and any relevant character abilities or modifications."
+                },
+                "move": {
+                    "name": "Move",
+                    "description": "Move up to your pace in inches once per turn, splitting the movement as desired."
+                },
+                "run": {
+                    "name": "Run",
+                    "description": "Run as an action once per turn, determined by your Running die result. Incurs a -2 penalty to other actions. Declare at the start of your turn."
+                },
+                "speak": {
+                    "name": "Speak",
+                    "description": "Utter one or two brief sentences within your turn."
+                },
+                "go-prone": {
+                    "name": "Go Prone",
+                    "description": "Drop prone to gain -4 cover against ranged attacks from distances greater than 3 inches."
+                },
+                "drop": {
+                    "name": "Drop",
+                    "description": "Drop an item voluntarily."
+                },
+                "not-sure": {
+                    "name": "Not Sure",
+                    "description": "Unsure about whether an unusual action counts as free? Consult the GM."
+                }
+            }
+        }
+    }
+}

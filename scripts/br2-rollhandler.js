@@ -5,13 +5,6 @@ export let BR2RollHandler = null
 Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
     BR2RollHandler = class BR2RollHandler extends SavageRollHandler  {
         
-        _get_behaviour(event) {
-            let key_option = game.settings.get(MODULE.ID, "br2RollsBehaviour");
-            if(event.ctrlKey) key_option = 'ctrl_click';
-            else if(event.altKey) key_option = 'alt_click';
-            else if(event.shiftKet) key_option = 'shift_click';
-            return game.brsw.get_action_from_click(key_option); //game.settings.get("betterrolls-swade2", key_option);
-        }
         /** @override */
         async _rollItem(event, actionId, actor) {            
             const item = actor.items.filter(el => el.id === actionId)[0];
@@ -20,7 +13,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 await item.show()
                 return
             }
-            const behavior = this._get_behaviour(event);
+            const behavior = game.brsw.get_action_from_click(event);
 
             if (behavior === "trait") {
                 await game.brsw
@@ -48,7 +41,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /** @override */
         _rollAttribute(event, actionId) {
-            const behavior = this._get_behaviour(event);
+            const behavior = game.brsw.get_action_from_click(event);
 
             if (behavior === "trait" || behavior === "trait_damage") {
                 game.brsw
@@ -70,7 +63,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /** @override */
         _rollSkill(event, actionId, actor) {
-            const behavior = this._get_behaviour(event);
+            const behavior = game.brsw.get_action_from_click(event);
 
             if (behavior === "trait" || behavior === "trait_damage") {
                 game.brsw

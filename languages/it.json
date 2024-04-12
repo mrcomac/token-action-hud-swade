@@ -1,0 +1,83 @@
+{
+    "tokenActionHud": {
+        "swade": {
+            "main-actions": "Azioni principali (fino a 3 azioni)",
+            "free-actions": "Azioni libere",
+            "helpme": "Aiutami",
+            "actions": {
+                "attack": {
+                    "name": "Attacco",
+                    "description": "Effettua un attacco con un'arma da mischia o a distanza contro un avversario."
+                },
+                "multi-action": {
+                    "name": "Azione Multipla",
+                    "description": "Esegui fino a tre azioni in un turno, con penalità: -2 per due azioni, -4 per tre azioni."
+                },
+                "wild-attack": {
+                    "name": "Attacco Feroce",
+                    "description": "Aumenta Combattimento di +2 e il danno da mischia di +2, a costo di diventare Vulnerabile agli attacchi."
+                },
+                "desperate-attack": {
+                    "name": "Attacco Disperato",
+                    "description": "Aumenta la tua abilità di Combattimento di +2 o +4 riducendo il danno da mischia di -2 o -4 rispettivamente."
+                },
+                "called-shot": {
+                    "name": "Colpo Mirato",
+                    "description": "Mira a una parte specifica del corpo con una difficoltà variabile: Arti (-2, può disarmare), Mani (-4, può disarmare), Testa/Organi Vitali (-4, aggiunge +4 di danno), Area Non Protetta (ignora l'Armatura, penalità varia)."
+                },
+                "aim": {
+                    "name": "Mira",
+                    "description": "Concentrati su un bersaglio per un turno intero, annullando fino a 4 punti di penalità da fattori come copertura o distanza, oppure aggiungi +2 al tuo primo attacco a distanza nel turno successivo."
+                },
+                "push": {
+                    "name": "Spinta",
+                    "description": "Effettua un tiro opposto di Forza o Atletica per spingere un avversario di 1” (2” con un successo rialzato). Aggiungi +2 se ti sei mosso di 2” in anticipo. Gli avversari possono fare un tiro di Atletica a -2 per resistere a cadere prono."
+                },
+                "grapple": {
+                    "name": "Presagrip",
+                    "description": "Intraprendi un tiro opposto di Atletica per Imbrigliare un avversario, o Legarlo (rendendoti anche tu Vulnerabile) con un successo rialzato."
+                },
+                "defend": {
+                    "name": "Difesa",
+                    "description": "Dedica il tuo turno alla difesa per guadagnare +4 a Parata. Puoi muoverti fino al tuo passo senza innescare attacchi gratuiti, ma non è consentito correre."
+                },
+                "support": {
+                    "name": "Supporto",
+                    "description": "Assisti il tiro di un tratto di un alleato descrivendo il tuo aiuto e facendo un tiro con la tua abilità pertinente: +1 in caso di successo, +2 con un successo rialzato, fino a un massimo di +4."
+                },
+                "test": {
+                    "name": "Prova",
+                    "description": "Sfida un avversario descrivendo una prova e facendo un tiro con una abilità pertinente contro l'attributo collegato dell'avversario. Successo: l'avversario è Distratto o Vulnerabile (a tua scelta). Successo rialzato: l'avversario è anche Scosso."
+                },
+                "reload": {
+                    "name": "Ricarica",
+                    "description": "Ricarica la tua arma, che generalmente richiede un'azione. Il tempo varia in base al tipo di arma e a eventuali abilità o modifiche del personaggio rilevanti."
+                },
+                "move": {
+                    "name": "Muovi",
+                    "description": "Muoviti fino al tuo passo in pollici una volta per turno, dividendo il movimento come desideri."
+                },
+                "run": {
+                    "name": "Corsa",
+                    "description": "Corri come un'azione una volta per turno, determinata dal risultato del tuo dado di Corsa. Subisce una penalità di -2 per altre azioni. Dichiara all'inizio del tuo turno."
+                },
+                "speak": {
+                    "name": "Parla",
+                    "description": "Pronuncia una o due frasi brevi durante il tuo turno."
+                },
+                "go-prone": {
+                    "name": "Andare Prone",
+                    "description": "Mettiti prono per ottenere una copertura di -4 contro attacchi a distanza da distanze superiori a 3 pollici."
+                },
+                "drop": {
+                    "name": "Lascia Cadere",
+                    "description": "Lascia cadere volontariamente un oggetto."
+                },
+                "not-sure": {
+                    "name": "Non Sicuro",
+                    "description": "Incerto se un'azione insolita sia gratuita? Consulta il GM."
+                }
+            }
+        }
+    }
+}

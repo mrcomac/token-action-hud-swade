@@ -1,3 +1,5 @@
+import { MAIN_ACTIONS, FREE_ACTIONS } from './constants.js'
+
 export let SavageRollHandler = null
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
@@ -16,6 +18,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (this.isRenderItem() && hasSheet.includes(macroType)) {
                 return this.renderItem(tokenId, actionId);
             }
+            console.log(macroType)
 
             switch (macroType) {
                 case "ae":
@@ -83,6 +86,23 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 case "maneuver":
                     const driver = await fromUuid(this.actor.system.driver.id)
                     this._rollSkill(event, actionId, driver);
+                    break;
+                case "main_action":
+                case "free_action":
+                    const all_actions = [...MAIN_ACTIONS, ...FREE_ACTIONS]
+                    all_actions.forEach(item => {
+                        if(item['id'] == actionId) {
+                            console.log(item)
+                            const results_html = `<h2>${item["name"]}</h2>
+                                            <p>${item["description"]}</p></div>`
+
+ChatMessage.create({
+	user: game.user._id,
+	speaker: ChatMessage.getSpeaker({token: actor}),
+	content: results_html
+});
+                        }
+                    })
                     break;
             }
         }

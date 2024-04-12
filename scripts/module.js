@@ -7,8 +7,7 @@ export let SavageSystemManager = null
 
 export let DEFAULTS = null
 
-function chatItem(message,actor) {
-    //crates chatmessage
+function chatItem(message, actor) {
     ChatMessage.create({
         user: game.user._id,
         speaker: ChatMessage.getSpeaker({token: actor}),
@@ -94,7 +93,9 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 benny: { id: 'benny', name: coreModule.api.Utils.i18n('SWADE.Rolls.Benny'), type: 'system' },
                 statuses: { id: 'statuses', name: coreModule.api.Utils.i18n('SWADE.Status'), type: 'system' },
                 effectsperm: { id: 'effectsperm', name: coreModule.api.Utils.i18n('SWADE.EffectsPermanent'), type: 'system' },
-                effectstemp: { id: 'effectstemp', name: coreModule.api.Utils.i18n('SWADE.EffectsTemporary'), type: 'system' }
+                effectstemp: { id: 'effectstemp', name: coreModule.api.Utils.i18n('SWADE.EffectsTemporary'), type: 'system' },
+                mainactions: { id: 'mainactions', name: game.i18n.localize('tokenActionHud.swade.main-actions'), type: 'system' },
+                freeactions: { id: 'freeactions', name: game.i18n.localize('tokenActionHud.swade.free-actions'), type: 'system' }
             }
             const groups = GROUP
             Object.values(groups).forEach(group => {
@@ -213,6 +214,15 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                             { ...groups.effectsperm, nestId: 'effects_effectsperm' },
                             { ...groups.effectstemp, nestId: 'effects_effectstemp' },
                             { ...groups.statuses, nestId: 'effects_statuses'}
+                        ]
+                    },
+                    {
+                        nestId: 'helpme',
+                        id: 'helpme',
+                        name: game.i18n.localize('tokenActionHud.swade.helpme'),
+                        groups: [
+                            { ...groups.mainactions, nestId: 'helpme_mainactions' },
+                            { ...groups.freeactions, nestId: 'helpme_freeactions' }
                         ]
                     }
                     

@@ -1,0 +1,83 @@
+{
+    "tokenActionHud": {
+        "swade": {
+            "main-actions": "Ações principais (até 3 ações)",
+            "free-actions": "Ações livres",
+            "helpme": "Ajude-me",
+            "actions": {
+                "attack": {
+                    "name": "Ataque",
+                    "description": "Realize um ataque com arma corpo a corpo ou à distância contra um oponente."
+                },
+                "multi-action": {
+                    "name": "Ação Múltipla",
+                    "description": "Execute até três ações em um turno, com penalidades: -2 para duas ações, -4 para três ações."
+                },
+                "wild-attack": {
+                    "name": "Ataque Selvagem",
+                    "description": "Aumente a Luta em +2 e o dano corpo a corpo em +2, ao custo de se tornar Vulnerável a ataques."
+                },
+                "desperate-attack": {
+                    "name": "Ataque Desesperado",
+                    "description": "Aumente sua habilidade de Luta em +2 ou +4 enquanto reduz o dano corpo a corpo em -2 ou -4, respectivamente."
+                },
+                "called-shot": {
+                    "name": "Tiro Certeiro",
+                    "description": "Mire em uma parte específica do corpo com dificuldade variável: Membros (-2, pode desarmar), Mãos (-4, pode desarmar), Cabeça/Órgãos Vitais (-4, adiciona +4 de dano), Área Não Protegida (ignora Armadura, penalidade varia)."
+                },
+                "aim": {
+                    "name": "Mira",
+                    "description": "Concentre-se em um alvo durante um turno inteiro, anulando até 4 pontos de penalidades de fatores como cobertura ou alcance, ou adicione +2 ao seu primeiro ataque à distância no próximo turno."
+                },
+                "push": {
+                    "name": "Empurrão",
+                    "description": "Faça uma rolagem oposta de Força ou Atletismo para empurrar um oponente 1” (2” com um aumento). Adicione +2 se você se moveu 2” anteriormente. Oponentes podem rolar Atletismo com -2 para resistir a cair."
+                },
+                "grapple": {
+                    "name": "Agarrão",
+                    "description": "Engaje em uma rolagem oposta de Atletismo para Enredar um oponente, ou Amarrá-lo (também se tornando Vulnerável) com um aumento."
+                },
+                "defend": {
+                    "name": "Defesa",
+                    "description": "Dedique seu turno à defesa para ganhar +4 em Parada. Mova-se até seu ritmo sem provocar ataques gratuitos, mas não é permitido correr."
+                },
+                "support": {
+                    "name": "Apoio",
+                    "description": "Auxilie a rolagem de um traço de um aliado descrevendo sua ajuda e rolando sua habilidade relevante: +1 em um sucesso, +2 em um aumento, até um máximo de +4."
+                },
+                "test": {
+                    "name": "Teste",
+                    "description": "Desafie um oponente descrevendo um teste e rolando uma habilidade relevante contra o atributo vinculado do oponente. Sucesso: o inimigo fica Distraído ou Vulnerável (sua escolha). Aumento: o inimigo também fica Abalado."
+                },
+                "reload": {
+                    "name": "Recarregar",
+                    "description": "Recarregue sua arma, o que geralmente leva uma ação. O tempo varia de acordo com o tipo de arma e quaisquer habilidades ou modificações de personagem relevantes."
+                },
+                "move": {
+                    "name": "Mover",
+                    "description": "Mova-se até seu ritmo em polegadas uma vez por turno, dividindo o movimento como desejar."
+                },
+                "run": {
+                    "name": "Correr",
+                    "description": "Corra como uma ação uma vez por turno, determinada pelo resultado de seu dado de Corrida. Incorre em uma penalidade de -2 para outras ações. Declare no início do seu turno."
+                },
+                "speak": {
+                    "name": "Falar",
+                    "description": "Pronuncie uma ou duas frases breves dentro do seu turno."
+                },
+                "go-prone": {
+                    "name": "Deitar",
+                    "description": "Deite-se para ganhar -4 de cobertura contra ataques à distância de distâncias maiores que 3 polegadas."
+                },
+                "drop": {
+                    "name": "Soltar",
+                    "description": "Largue um item voluntariamente."
+                },
+                "not-sure": {
+                    "name": "Não Tenho Certeza",
+                    "description": "Incerto sobre se uma ação incomum conta como livre? Consulte o GM."
+                }
+            }
+        }
+    }
+}
