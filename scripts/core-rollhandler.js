@@ -18,7 +18,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             if (this.isRenderItem() && hasSheet.includes(macroType)) {
                 return this.renderItem(tokenId, actionId);
             }
-            console.log(macroType)
 
             switch (macroType) {
                 case "ae":
@@ -89,18 +88,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     break;
                 case "main_action":
                 case "free_action":
-                    const all_actions = [...MAIN_ACTIONS, ...FREE_ACTIONS]
+                    const all_actions = MAIN_ACTIONS.concat(FREE_ACTIONS)
                     all_actions.forEach(item => {
                         if(item['id'] == actionId) {
-                            console.log(item)
                             const results_html = `<h2>${item["name"]}</h2>
                                             <p>${item["description"]}</p></div>`
 
-ChatMessage.create({
-	user: game.user._id,
-	speaker: ChatMessage.getSpeaker({token: actor}),
-	content: results_html
-});
+                            ChatMessage.create({
+                                user: game.user._id,
+                                speaker: ChatMessage.getSpeaker({token: actor}),
+                                content: results_html
+                            });
                         }
                     })
                     break;

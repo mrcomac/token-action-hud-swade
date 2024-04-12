@@ -20,6 +20,9 @@ export const MAIN_ACTIONS = []
 export const FREE_ACTIONS = []
 
 export function init_help_buttons(delimiter) {
+    delete MAIN_ACTIONS[MAIN_ACTIONS.findIndex(item => item !== item)];
+    delete FREE_ACTIONS[FREE_ACTIONS.findIndex(item => item !== item)];
+
     MAIN_ACTIONS.push({
         id:'attack',
         name: game.i18n.localize(
