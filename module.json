@@ -21,6 +21,14 @@
       "flags": {}
     }
   ],
+  "bugs": "https://github.com/mrcomac/token-action-hud-swade/issues",
+  "media": [
+    {
+      "type": "setup",
+      "url": "https://savageuniverse.com/assets/img/SW_LOGO_FP.webp",
+      "thumbnail": "https://savageuniverse.com/assets/img/SW_LOGO_FP.webp"
+    }
+  ],
   "relationships": {
     "systems": [
       {
