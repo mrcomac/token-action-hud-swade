@@ -56,6 +56,16 @@
         "lang": "en",
         "name": "English",
         "path": "languages/en.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Portugues",
+      "path": "languages/pt-BR.json"
+    },
+    {
+      "lang": "it",
+      "name": "Italiano",
+      "path": "languages/it.json"
     }
   ],
   "url": "https://github.com/mrcomac/token-action-hud-swade",
