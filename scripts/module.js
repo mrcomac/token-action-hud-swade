@@ -3,6 +3,8 @@ import { SavageRollHandler as CoreRoll } from './core-rollhandler.js'
 import { BR2RollHandler as BR2Roll } from './br2-rollhandler.js'
 import { SwadeToolsRollHandler } from './swadetools-rollhandler.js'
 import * as systemSettings from './settings.js'
+import { MODULE } from './constants.js'
+
 export let SavageSystemManager = null
 
 export let DEFAULTS = null
@@ -105,14 +107,14 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
             const groupsArray = Object.values(groups)
             DEFAULTS = {
                 layout: [
-                    /*{
+                    {
                         nestId: 'vehicle',
                         id: 'vehicle',
                         name: coreModule.api.Utils.i18n('SWADE.TYPES.Actor.vehicle'),
                         groups: [
                             { ...groups.vehicledriver, nestId: 'vehicledriver' },
                         ]
-                    },*/
+                    },
                     {
                         nestId: 'utility',
                         id: 'utility',
@@ -236,7 +238,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
     /* STARTING POINT */
 
-    const module = game.modules.get('token-action-hud-swade');
+    const module = game.modules.get(MODULE.ID);
     module.api = {
         requiredCoreModuleVersion: '1.5',
         SystemManager: SavageSystemManager

@@ -1,3 +1,7 @@
+export const MODULE = {
+    ID: "token-action-hud-swade"
+}
+
 export const ATTRIBUTE_ID = {
     'SWADE.AttrAgi': 'agility', 
     'SWADE.AttrSma': "smarts", 
@@ -6,11 +10,7 @@ export const ATTRIBUTE_ID = {
     'SWADE.AttrVig': "vigor"
 }
 
-export const MODULE = {
-    ID: "token-action-hud-swade-development"
-}
-
-export const MODULEDIR = 'modules/token-action-hud-swade/'
+export const MODULEDIR = 'modules/' + MODULE.ID + '/'
 export const IMG_DICE = MODULEDIR + 'assets/'
 export const SYSDIR = 'systems/swade/'
 export const ICONSDIR = SYSDIR + 'assets/icons/'
@@ -20,8 +20,8 @@ export const MAIN_ACTIONS = []
 export const FREE_ACTIONS = []
 
 export function init_help_buttons(delimiter) {
-    delete MAIN_ACTIONS[MAIN_ACTIONS.findIndex(item => item !== item)];
-    delete FREE_ACTIONS[FREE_ACTIONS.findIndex(item => item !== item)];
+    MAIN_ACTIONS.length = 0;
+    FREE_ACTIONS.length = 0;
 
     MAIN_ACTIONS.push({
         id:'attack',
