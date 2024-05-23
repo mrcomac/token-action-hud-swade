@@ -344,11 +344,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         _getStatuses(parent, default_statuses) {
             let actions = [];
             default_statuses.forEach(_status => {
-                let img = CONFIG.statusEffects.find((el) => el.id ===_status.toLowerCase())?.icon ?? null;
+                let statusEffect = CONFIG.statusEffects.find((el) => el.id ===_status.toLowerCase())
+                let img = statusEffect?.icon ?? null;
                 
                 let action =  {
                     id: _status.toLowerCase(),
-                    name: _status,
+                    name: statusEffect ? game.i18n.localize(statusEffect.label) : _status,
                     cssClass: this.actor.statuses.has(_status.toLowerCase()) ? "toggle active" : "togle",
                     img: img,
                     description: _status,
