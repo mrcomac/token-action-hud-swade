@@ -33,5 +33,25 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 coreModule.api.Logger.debug(`Setting '${key}' not found`)
             }
         }
+    
+        /**
+         * Returns the localized string for a given attribute
+         * @param {string} attribute The id of the attribute 
+         */
+        static getLocalizedAttributeName(attribute) {
+            if (attribute === "agility") {
+                return game.i18n.localize("SWADE.AttrAgi");
+            } else if (attribute === "smarts") {
+                return game.i18n.localize("SWADE.AttrSma");
+            } else if (attribute === "spirit") {
+                return game.i18n.localize("SWADE.AttrSpr");
+            } else if (attribute === "strength") {
+                return game.i18n.localize("SWADE.AttrStr");
+            } else if (attribute === "vigor") {
+                return game.i18n.localize("SWADE.AttrVig");
+            }
+    
+            return "Invalid Attribute";
+        }
     }
 })

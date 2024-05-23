@@ -1,4 +1,5 @@
 import { ATTRIBUTE_ID, ICONSDIR, IMG_DICE, init_help_buttons, MAIN_ACTIONS, FREE_ACTIONS } from './constants.js'
+import { Utils } from './utils.js'
 export let SavageActionHandler = null
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
@@ -262,8 +263,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     const data = a[1];
                     let img = IMG_DICE + 'd' + data.die.sides + '.svg'
                     actions.push({
-                        id:key,
-                        name: coreModule.api.Utils.i18n(key),
+                        id: key,
+                        name: Utils.getLocalizedAttributeName(key),
                         img: img,
                         description: coreModule.api.Utils.i18n('SWADE.Attributes'),
                         encodedValue: [macroType, key].join(this.delimiter),
@@ -344,11 +345,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         _getStatuses(parent, default_statuses) {
             let actions = [];
             default_statuses.forEach(_status => {
-                let img = CONFIG.statusEffects.find((el) => el.id ===_status.toLowerCase())?.icon ?? null;
+                let statusEffect = CONFIG.statusEffects.find((el) => el.id === _status)
+                let img = statusEffect?.icon ?? null;
                 
                 let action =  {
                     id: _status.toLowerCase(),
-                    name: _status,
+                    name: statusEffect ? game.i18n.localize(statusEffect.label) : _status,
                     cssClass: this.actor.statuses.has(_status.toLowerCase()) ? "toggle active" : "togle",
                     img: img,
                     description: _status,
