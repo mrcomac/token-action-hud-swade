@@ -344,7 +344,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         _getStatuses(parent, default_statuses) {
             let actions = [];
             default_statuses.forEach(_status => {
-                let statusEffect = CONFIG.statusEffects.find((el) => el.id ===_status.toLowerCase())
+                let statusEffect = CONFIG.statusEffects.find((el) => el.id === _status)
                 let img = statusEffect?.icon ?? null;
                 
                 let action =  {
