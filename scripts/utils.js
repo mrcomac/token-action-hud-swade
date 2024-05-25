@@ -2,6 +2,12 @@ import { MODULE } from './constants.js'
 
 export let Utils = null
 
+export function format_tooltip(original_str) {
+    const pattern = /@\w+\[.*?\]\{(.*?)\}/g;
+    let formatted_str = original_str.replace(pattern, '$1');
+    return formatted_str;
+}
+
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
     Utils = class Utils {
     /**

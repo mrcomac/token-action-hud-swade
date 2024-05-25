@@ -1,5 +1,5 @@
 import { ATTRIBUTE_ID, ICONSDIR, IMG_DICE, init_help_buttons, MAIN_ACTIONS, FREE_ACTIONS } from './constants.js'
-import { Utils } from './utils.js'
+import { Utils, format_tooltip } from './utils.js'
 export let SavageActionHandler = null
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
@@ -54,7 +54,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         name: effect.name,
                         img: effect.icon,
                         cssClass: effect.disabled ? "toggle" : "togle active",
-                        description: effect.name,
+                        tooltip: format_tooltip(effect.name),
                         encodedValue: ['ae', effect.id,effect.disabled,item.id].join(this.delimiter),
                         info2: { text: item.type+": "+item.name }
                     }], parent);
@@ -83,7 +83,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         name: eff.name,
                         img: eff.icon,
                         cssClass: eff.disabled ? "toggle" : "togle active",
-                        description: eff.name,
+                        tooltip: format_tooltip(eff.name),
                         encodedValue: ['effects', eff.id].join(this.delimiter),
                         info2: { text: group.id == 'effectstemp' ? coreModule.api.Utils.i18n('SWADE.Dur')+": "+eff.duration.label : '' }
                     }], group);
@@ -111,7 +111,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         name: group[0],
                         img: IMG_DICE+"pp.webp",
                         cssClass: "disabled",
-                        description: coreModule.api.Utils.i18n('SWADE.PP'),
+                        tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.PP')),
                         encodedValue: ['powerPoints', 'NONE'].join(this.delimiter),
                         info1: { text: String(group[1].value) +"/"+String(group[1].max) }
                     })
@@ -122,7 +122,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         name: "",
                         cssClass: "",
                         icon1: '<i class="fa fa-plus" aria-hidden="true"></i>',
-                        description: coreModule.api.Utils.i18n('SWADE.PP'),
+                        tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.PP')),
                         encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
                     })
                     
@@ -132,7 +132,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         name: "",
                         cssClass: "",
                         icon1: '<i class="fa fa-minus" aria-hidden="true"></i>',
-                        description: coreModule.api.Utils.i18n('SWADE.PP'),
+                        tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.PP')),
                         encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
                     })
                     
@@ -151,7 +151,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     id: el.id,
                     img: el.img,
                     name: el.name,
-                    description: el.system.description,
+                    tooltip: format_tooltip(el.system.description),
                     encodedValue: [parent.id, el.id, el.id].join(this.delimiter)
                 }
                 if (["power", "weapon"].includes(el.type) && el.system.damage) {
@@ -187,7 +187,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         id: el.id,
                         img: el.img,
                         name: el.name,
-                        description: el.system.description,
+                        tooltip: format_tooltip(el.system.description),
                         encodedValue: [parent.id, el.id, el.id].join(this.delimiter)
                     }
                     if (el.system.favorite == true) {
@@ -216,7 +216,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     id: this.actor.id,
                     name: coreModule.api.Utils.i18n("SWADE.ManCheck"),
                     img: "systems/swade/assets/icons/skills/steering-wheel.svg",
-                    description: "",
+                    tooltip: format_tooltip(""),
                     encodedValue: ['maneuver', skill.id].join(this.delimiter),
                     info1: { text: SavageActionHandler._buildDieString(skill.system.die) }
                 }], parent)
@@ -228,7 +228,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         id: element.id,
                         name: element.name,
                         img: element.img,
-                        description: element.system.description,
+                        tooltip: format_tooltip(element.system.description),
                         encodedValue: ['skills', element.id].join(this.delimiter),
                         info1: { text: SavageActionHandler._buildDieString(element.system.die) }
                     }
@@ -253,7 +253,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         id:'run',
                         name: coreModule.api.Utils.i18n('SWADE.Running'),
                         img: IMG_DICE + 'd' + img + '.svg',
-                        description: coreModule.api.Utils.i18n('SWADE.Running'),
+                        tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Running')),
                         encodedValue: ['runningDie', 'runningDie'].join(this.delimiter),
                     };
                     let child = {id: 'derivedstats', type: 'system'}
@@ -266,7 +266,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         id: key,
                         name: Utils.getLocalizedAttributeName(key),
                         img: img,
-                        description: coreModule.api.Utils.i18n('SWADE.Attributes'),
+                        tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Attributes')),
                         encodedValue: [macroType, key].join(this.delimiter),
                     })
                 }
@@ -282,7 +282,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 name: coreModule.api.Utils.i18n('SWADE.Wounds'),
                 img: IMG_DICE+"wound.webp",
                 cssClass: "disabled",
-                description: coreModule.api.Utils.i18n('SWADE.Wounds'),
+                tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Wounds')),
                 encodedValue: ['wounds', 'NONE'].join(this.delimiter),
                 info1: { text: String(this.actor.system.wounds.value) +"/"+String(this.actor.system.wounds.max) }
             })
@@ -292,7 +292,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 name: "",
                 cssClass: "",
                 icon1: '<i class="fa fa-plus" aria-hidden="true"></i>',
-                description: coreModule.api.Utils.i18n('SWADE.Wounds'),
+                tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Wounds')),
                 encodedValue: ['wounds', 'add'].join(this.delimiter)
             })
             if(this.actor.system.wounds.value > 0) {
@@ -301,7 +301,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     name: "",
                     cssClass: "",
                     icon1: '<i class="fa fa-minus" aria-hidden="true"></i>',
-                    description: coreModule.api.Utils.i18n('SWADE.Wounds'),
+                    tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Wounds')),
                     encodedValue: ['wounds', 'remove'].join(this.delimiter)
                 })
             }
@@ -315,7 +315,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 name: coreModule.api.Utils.i18n('SWADE.Fatigue'),
                 img: IMG_DICE+"fatigue.webp",
                 cssClass: "disabled",
-                description: coreModule.api.Utils.i18n('SWADE.Fatigue'),
+                tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Fatigue')),
                 encodedValue: ['fatigue', 'NONE'].join(this.delimiter),
                 info1: { text: String(this.actor.system.fatigue.value) +"/"+String(this.actor.system.fatigue.max) }
             })
@@ -324,7 +324,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 name: "",
                 cssClass: "",
                 icon1: '<i class="fa fa-plus" aria-hidden="true"></i>',
-                description: coreModule.api.Utils.i18n('SWADE.Fatigue'),
+                tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Fatigue')),
                 encodedValue: ['fatigue', 'add'].join(this.delimiter)
             
             })
@@ -335,7 +335,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     name: "",
                     cssClass: "",
                     icon1: '<i class="fa fa-minus" aria-hidden="true"></i>',
-                    description: coreModule.api.Utils.i18n('SWADE.Fatigue'),
+                    tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Fatigue')),
                     encodedValue: ['fatigue', 'remove'].join(this.delimiter)
                 
                 })
@@ -353,7 +353,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     name: statusEffect ? game.i18n.localize(statusEffect.label) : _status,
                     cssClass: this.actor.statuses.has(_status.toLowerCase()) ? "toggle active" : "togle",
                     img: img,
-                    description: _status,
+                    tooltip: format_tooltip(_status),
                     encodedValue: ['statuses', _status].join(this.delimiter)
                 }
                 actions.push(action)
@@ -368,7 +368,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     id:'spend',
                     name: coreModule.api.Utils.i18n('SWADE.BenniesSpend'),
                     img: game.settings.get("swade", "bennyImageSheet"),
-                    description: coreModule.api.Utils.i18n('SWADE.BenniesSpend'),
+                    tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.BenniesSpend')),
                     encodedValue: ['benny', 'spend'].join(this.delimiter),
                     info1: { text: this.actor.system.bennies.value }
                 }
@@ -383,7 +383,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     id:'give',
                     name: coreModule.api.Utils.i18n('SWADE.BenniesGive'),
                     img: game.settings.get("swade", "bennyImageSheet"),
-                    description: coreModule.api.Utils.i18n('SWADE.BenniesGive'),
+                    tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.BenniesGive')),
                     encodedValue: ['benny', 'give'].join(this.delimiter)
                 }
                 let actions = [ action ]
