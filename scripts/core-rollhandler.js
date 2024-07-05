@@ -79,8 +79,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 case "wounds":
                 case "fatigue":
                 case "powerPoints":
-                    if(actionId != "NONE")
+                    if(actionId != "NONE") {
                         this._wounds(macroType,actor,actionId)
+                    }
                 break;
                 case "maneuver":
                     const driver = await fromUuid(this.actor.system.driver.id)
@@ -110,18 +111,19 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
 
         _wounds(event,actor,actionId) {
-            let update = { data: { } };
+            let update = { system: { } };
             let poll = actionId.split(">")
             if(poll.length == 2) actionId = poll[0]
             if(actionId == "add") {
                 if(event == 'powerPoints') {
                     let p = poll[1]
-                    update["data"][event] = {}
-                    update["data"][event][p] = {
+                    update["system"][event] = {}
+                    update["system"][event][p] = {
                         value: this.token.actor.system[event][p].value + 1
                     }
                 } else {
-                    update["data"][event]= {
+                    
+                    update["system"][event]= {
                         value: this.token.actor.system[event].value + 1
                     }
                 }
@@ -129,17 +131,18 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             else if(actionId == "remove") {
                 if(event == 'powerPoints') {
                     let p = poll[1]
-                    update["data"][event] = {}
-                    update["data"][event][p]= {
+                    update["system"][event] = {}
+                    update["system"][event][p]= {
                         value: this.token.actor.system[event][p].value - 1
                     }
                 } else if(actor.system[event].value > 0) {
-                    update["data"][event]= {
+                    update["system"][event]= {
                         value: this.token.actor.system[event].value - 1
                     }
                 }
                 
             }
+            console.log(update)
             actor.update(update)
         }
 

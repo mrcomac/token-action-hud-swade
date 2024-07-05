@@ -52,7 +52,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.addActions([{
                         id:'ac'+effect.id,
                         name: effect.name,
-                        img: effect.icon,
+                        img: effect.img,
                         cssClass: effect.disabled ? "toggle" : "togle active",
                         tooltip: format_tooltip(effect.name),
                         encodedValue: ['ae', effect.id,effect.disabled,item.id].join(this.delimiter),
@@ -64,7 +64,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         _effects(default_statuses) {
             let temporary = { id: 'effectstemp', type: 'system' }
             let permanent = { id: 'effectsperm', type: 'system' }
-
             let effects = Array.from(this.actor.effects)
             const items = Array.from(this.actor.items.filter(it => ['edge', 'hindrance', 'ability'].includes(it.type)))
             items.forEach(item => {
@@ -81,7 +80,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     this.addActions([{
                         id:'ef'+eff.name,
                         name: eff.name,
-                        img: eff.icon,
+                        img: eff.img,
                         cssClass: eff.disabled ? "toggle" : "togle active",
                         tooltip: format_tooltip(eff.name),
                         encodedValue: ['effects', eff.id].join(this.delimiter),
@@ -290,7 +289,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             actions.push({
                 id:'WoundsAdd',
                 name: "",
-                cssClass: "",
+                cssClass: "shrink",
                 icon1: '<i class="fa fa-plus" aria-hidden="true"></i>',
                 tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Wounds')),
                 encodedValue: ['wounds', 'add'].join(this.delimiter)
@@ -299,7 +298,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 actions.push({
                     id:'WoundsRemove',
                     name: "",
-                    cssClass: "",
+                    cssClass: "shrink",
                     icon1: '<i class="fa fa-minus" aria-hidden="true"></i>',
                     tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Wounds')),
                     encodedValue: ['wounds', 'remove'].join(this.delimiter)
@@ -314,7 +313,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 id:'fatigue',
                 name: coreModule.api.Utils.i18n('SWADE.Fatigue'),
                 img: IMG_DICE+"fatigue.webp",
-                cssClass: "disabled",
+                cssClass: "disabled shrink",
                 tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Fatigue')),
                 encodedValue: ['fatigue', 'NONE'].join(this.delimiter),
                 info1: { text: String(this.actor.system.fatigue.value) +"/"+String(this.actor.system.fatigue.max) }
@@ -322,7 +321,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             actions.push({
                 id:'FatigueAdd',
                 name: "",
-                cssClass: "",
+                cssClass: "shrink",
                 icon1: '<i class="fa fa-plus" aria-hidden="true"></i>',
                 tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Fatigue')),
                 encodedValue: ['fatigue', 'add'].join(this.delimiter)
@@ -346,11 +345,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             let actions = [];
             default_statuses.forEach(_status => {
                 let statusEffect = CONFIG.statusEffects.find((el) => el.id === _status)
-                let img = statusEffect?.icon ?? null;
+                let img = statusEffect?.img ?? null;
                 
                 let action =  {
                     id: _status.toLowerCase(),
-                    name: statusEffect ? game.i18n.localize(statusEffect.label) : _status,
+                    name: statusEffect ? game.i18n.localize(statusEffect.name) : _status,
                     cssClass: this.actor.statuses.has(_status.toLowerCase()) ? "toggle active" : "togle",
                     img: img,
                     tooltip: format_tooltip(_status),
