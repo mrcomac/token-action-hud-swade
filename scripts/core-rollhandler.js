@@ -90,10 +90,11 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 case "main_action":
                 case "free_action":
                     const all_actions = MAIN_ACTIONS.concat(FREE_ACTIONS)
+                    
                     all_actions.forEach(item => {
                         if(item['id'] == actionId) {
                             const results_html = `<h2>${item["name"]}</h2>
-                                            <p>${item["description"]}</p></div>`
+                                            <p>${item["tooltip"]}</p></div>`
 
                             ChatMessage.create({
                                 user: game.user._id,
@@ -142,7 +143,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 }
                 
             }
-            console.log(update)
             actor.update(update)
         }
 
