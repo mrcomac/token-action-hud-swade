@@ -1,4 +1,7 @@
 [![Current Version](https://img.shields.io/github/v/release/mrcomac/token-action-hud-swade?style=for-the-badge&label=Current%20Version)]() [![Latest Release Download Count](https://img.shields.io/github/downloads/mrcomac/token-action-hud-swade/latest/module.zip?label=Downloads&style=for-the-badge)]() [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Ftoken-action-hud-swade&colorB=03ff1c&style=for-the-badge)](https://forge-vtt.com/bazaar#package=token-action-hud-swade)
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/snagov)
+
 # Introduction
 A plug-in module for the module [Token Action HUD Core](https://foundryvtt.com/packages/token-action-hud-core) which adds support for the [Savage Worlds](https://foundryvtt.com/packages/swade).
 
