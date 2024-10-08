@@ -1,0 +1,83 @@
+{
+    "tokenActionHud": {
+        "swade": {
+            "main-actions": "Actions principales (jusqu'à 3 actions)",
+            "free-actions": "Actions gratuites",
+            "helpme": "Aide",
+            "actions": {
+                "attack": {
+                    "name": "Attaque",
+                    "description": "Effectue une attaque au corps à corps ou à distance en utilisant une arme contre un adversaire."
+                },
+                "multi-action": {
+                    "name": "Actions multiples",
+                    "description": "Exécute jusqu'à trois actions en un tour, avec des pénalités : -2 pour deux actions, -4 pour trois actions."
+                },
+                "wild-attack": {
+                    "name": "Attaque totale",
+                    "description": "Augmente Combat de +2 et les dégâts de corps à corps de +2, mais devient Vulnérable aux attaques."
+                },
+                "desperate-attack": {
+                    "name": "Attaque désespérée",
+                    "description": "Augmente Combat de +2 ou +4 tout en réduisant les dégâts de corps à corps de -2 ou -4 respectivement."
+                },
+                "called-shot": {
+                    "name": "Attaque ciblée",
+                    "description": "Vise une partie spécifique du corps avec une difficulté variable : membres (-2, désarmement potentiel), mains (-4, désarmement potentiel), tête/organes vitaux (-4, ajoute +4 dégâts), zone non protégée (ignore l'armure, la pénalité varie)."
+                },
+                "aim": {
+                    "name": "Viser",
+                    "description": "Vise une cible pendant un tour complet, annulant jusqu'à 4 points de pénalité dus à des facteurs tels que la couverture ou la portée, ou ajoute +2 à la première attaque à distance au tour suivant."
+                },
+                "push": {
+                    "name": "Pousser",
+                    "description": "Effectue un jet de Force ou d'Athlétisme opposé pour pousser un adversaire de 1 case (2 cases avec une Prouesse). Ajoute +2 au jet opposé si déplacement de 2 cases auparavant. Les adversaires peuvent faire un jet d'Athlétisme à -2 pour résister à une chute à terre."
+                },
+                "grapple": {
+                    "name": "Empoignade",
+                    "description": "Effectue un jet d'Athlétisme opposé pour Entraver un adversaire, ou l'Immobiliser (vous devenez également Vulnérable) avec une Prouesse."
+                },
+                "defend": {
+                    "name": "Défense totale",
+                    "description": "Consacre le tour à la défense pour gagner +4 en Parade. Peut se déplace mais pas Courir. Ne peut pas faire d'Actions multiples."
+                },
+                "support": {
+                    "name": "Soutien",
+                    "description": "Coopère sur le jet de Compétence d'un allié en décrivant l'action entreprise et en faisant un jet de la compétence adéquate : +1 en cas de réussite, +2 en cas de Prouesse, -2 en cas d'Echec critique. Bonus maximum de +4 sauf sur les jets de Force."
+                },
+                "test": {
+                    "name": "Épreuve",
+                    "description": "Défie un adversaire en décrivant l'action entreprise et en faisant un jet de la compétence adéquate contre son attribut. Succès : l'ennemi est Distrait ou Vulnérable (au choix). Epreuve : l'ennemi est également Secoué."
+                },
+                "reload": {
+                    "name": "Rechargement",
+                    "description": "Recharge une arme avec une action. La durée varie selon le type d'arme et les Capacités ou Atouts possédés."
+                },
+                "move": {
+                    "name": "Se déplacer",
+                    "description": "Se déplace jusqu'à Allure cases une fois par tour. Le mouvement peut être divisé avant, pendant ou après les actions effectuées."
+                },
+                "run": {
+                    "name": "Courir",
+                    "description": "Exécute une action gratuite pour ajouter le dé de course une fois par tour avec une pénalité de -2 aux autres actions. Doit être déclaré au début du tour."
+                },
+                "speak": {
+                    "name": "Parler",
+                    "description": "Prononce une ou deux phrases brèves."
+                },
+                "go-prone": {
+                    "name": "À terre",
+                    "description": "Se mettre en position couchée pour gagner -4 de couverture contre les attaques à distance supérieures à 3 cases."
+                },
+                "drop": {
+                    "name": "Lâcher",
+                    "description": "Laisser tomber un objet volontairement."
+                },
+                "not-sure": {
+                    "name": "Pas sûr",
+                    "description": "Vous ne savez pas si une action inhabituelle est considérée comme gratuite ? Consultez le MJ."
+                }
+            }
+        }
+    }
+}
