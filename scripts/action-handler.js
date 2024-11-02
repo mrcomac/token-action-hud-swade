@@ -75,7 +75,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 if(eff.isTemporary == false) {
                     group = permanent
                 }
-                
                 if(!default_statuses.includes(eff.name)) {
                     this.addActions([{
                         id:'ef'+eff.name,
@@ -83,8 +82,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         img: eff.img,
                         cssClass: eff.disabled ? "toggle" : "togle active",
                         tooltip: format_tooltip(eff.name),
-                        encodedValue: ['effects', eff.id].join(this.delimiter),
-                        info2: { text: group.id == 'effectstemp' ? coreModule.api.Utils.i18n('SWADE.Dur')+": "+eff.duration.label : '' }
+                        encodedValue: ['effects', eff.id].join(this.delimiter)
+                        /*info2: { text: group.id == 'effectstemp' ? coreModule.api.Utils.i18n('SWADE.Dur')+": "+eff.duration.name : '' }*/
                     }], group);
                 }
 

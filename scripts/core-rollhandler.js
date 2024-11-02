@@ -175,7 +175,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
                 
             }
-            game.tokenActionHud.update()
+            Hooks.callAll('forceUpdateTokenActionHud');
+            //game.tokenActionHud.update()
         }
 
         /** @private */
