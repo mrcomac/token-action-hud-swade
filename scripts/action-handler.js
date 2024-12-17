@@ -243,7 +243,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             attributes.push("run")
             attributes.forEach((a) => {
                 if(a == 'run') {
-                    let img = this.actor.system.stats.speed.runningDie
+                    let img = this.actor.system.pace.running.die
                     if(typeof img === 'undefined') {
                         img = '4'
                     }
