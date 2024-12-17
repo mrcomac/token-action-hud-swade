@@ -68,7 +68,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const items = Array.from(this.actor.items.filter(it => ['edge', 'hindrance', 'ability'].includes(it.type)))
             items.forEach(item => {
                 let _eff = Array.from(item.effects)
-                if(_eff.length > 0) effects = effects.concat(effects, _eff)
+                if(_eff.length > 0) {
+                    const merged_effects = [...new Set([...effects, ..._eff])];
+                    effects = merged_effects;
+                }
             })
             effects.forEach( eff => {
                 let group = temporary
@@ -83,10 +86,9 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         cssClass: eff.disabled ? "toggle" : "togle active",
                         tooltip: format_tooltip(eff.name),
                         encodedValue: ['effects', eff.id].join(this.delimiter)
-                        /*info2: { text: group.id == 'effectstemp' ? coreModule.api.Utils.i18n('SWADE.Dur')+": "+eff.duration.name : '' }*/
+                    
                     }], group);
                 }
-
             })
             this._getStatuses({ id: 'statuses', type: 'system' }, default_statuses)
         }
