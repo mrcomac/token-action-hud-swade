@@ -25,7 +25,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 await game.brsw
                     .create_item_card(this.token, actionId)
                     .then((message) => {
-                        game.brsw.roll_item(message, $(message.content), false, true);
+                        game.brsw.roll_item(message, "", false, true);
                     });
             } else if (behavior === "system") {
                 await game.swade.rollItemMacro(actor.items.get(actionId).name);

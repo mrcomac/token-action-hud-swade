@@ -2,6 +2,7 @@
 .tah-info2,
 .tah-info3 {
 	font-size: smaller;
+	min-width: 30px;
 }
 
 .tah-info1 {

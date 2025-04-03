@@ -45,21 +45,15 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
 
         /** @override */
         getRollHandler(handlerId) {
-            let rollHandler
             switch (handlerId) {
                 case 'betterrolls-swade2':
-                    rollHandler = new BR2Roll()
-                break
+                    return new BR2Roll();
                 case 'swade-tools':
-                    rollHandler = new SwadeToolsRollHandler()
-                break
+                    return new SwadeToolsRollHandler();
                 case 'core':
                 default:
-                    rollHandler = new CoreRoll()
-                break
+                    return new CoreRoll();
             }
-
-            return rollHandler
         }
 
         /** @override */

@@ -1,11 +1,9 @@
-import { MODULE } from './constants.js'
+import { MAIN_ACTIONS, FREE_ACTIONS, MODULE } from './constants.js'
 
 export let Utils = null
 
 export function format_tooltip(original_str) {
-    const pattern = /@\w+\[.*?\]\{(.*?)\}/g;
-    let formatted_str = original_str.replace(pattern, '$1');
-    return formatted_str;
+    return original_str.replace(/@\w+\[.*?\]\{(.*?)\}/g, '$1');
 }
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
@@ -17,13 +15,12 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
      * @returns The setting value
      */
         static getSetting (key, defaultValue = null) {
-            let value = defaultValue ?? null
             try {
-                value = game.settings.get(MODULE.ID, key)
-            } catch {
-                coreModule.api.Logger.debug(`Setting '${key}' not found`)
+                return game.settings.get(MODULE.ID, key);
+            } catch (error) {
+                coreModule.api.Logger.debug(`Error getting setting '${key}': ${error.message}`);
+                return defaultValue;
             }
-            return value
         }
 
         /**
@@ -61,3 +58,20 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
     }
 })
+
+export function init_help_buttons(delimiter) {
+
+    for (let i=0; i<MAIN_ACTIONS.length; i++) {
+        MAIN_ACTIONS[i].encodedValue = ['main_action', MAIN_ACTIONS[i].id].join(delimiter)
+        MAIN_ACTIONS[i].tooltip = format_tooltip(game.i18n.localize(MAIN_ACTIONS[i].tooltip))
+        MAIN_ACTIONS[i].name = game.i18n.localize(MAIN_ACTIONS[i].name)
+    }
+
+    for (let i=0; i < FREE_ACTIONS.length; i++) {
+        FREE_ACTIONS[i].encodedValue = ['main_action', FREE_ACTIONS[i].id].join(delimiter)
+        FREE_ACTIONS[i].tooltip = format_tooltip(game.i18n.localize(FREE_ACTIONS[i].tooltip))
+        FREE_ACTIONS[i].name = game.i18n.localize(FREE_ACTIONS[i].name)
+    }
+
+    return { MAIN_ACTIONS, FREE_ACTIONS }
+}
