@@ -1,0 +1,65 @@
+name: Create Tag and Release on PR Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  create-tag-and-release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate PR Title Format
+        id: validate_title
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          echo "Pull Request Title: $PR_TITLE"
+
+          # Regular expression for versioning: vX.Y.Z or vX.Y.Z-suffix
+          if [[ ! "$PR_TITLE" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-beta|-test|-rc[0-9]*)?$ ]]; then
+            echo "❌ ERROR: PR title must follow the format vX.Y.Z or vX.Y.Z-{beta,test,rc} (e.g., v1.0.0, v2.3.0-beta)"
+            exit 1
+          fi
+
+          echo "✅ PR title format is valid."
+          echo "TAG_NAME=$PR_TITLE" >> $GITHUB_ENV
+
+      - name: Check if it is a Pre-release
+        id: check_prerelease
+        run: |
+          if [[ "$TAG_NAME" =~ -beta|-test|-rc[0-9]* ]]; then
+            echo "🔹 Detected pre-release version: $TAG_NAME"
+            echo "IS_PRERELEASE=true" >> $GITHUB_ENV
+          else
+            echo "✅ This is a stable release: $TAG_NAME"
+            echo "IS_PRERELEASE=false" >> $GITHUB_ENV
+          fi
+
+      - name: Extract PR Description
+        id: pr_info
+        run: |
+          DESCRIPTION="${{ github.event.pull_request.body }}"
+          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
+          echo "$DESCRIPTION" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create Git Tag
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          git tag $TAG_NAME
+          git push https://x-access-token:${{ secrets.REPO_SEC }}@github.com/${{ github.repository }}.git $TAG_NAME
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.REPO_SEC }}
+          tag_name: ${{ env.TAG_NAME }}
+          body: ${{ env.RELEASE_BODY }}
+          draft: false
+          prerelease: ${{ env.IS_PRERELEASE }}

@@ -1,4 +1,4 @@
-name: Release Creation
+name: Publish to FoundryVTT
 
 on:
   release:
