@@ -1,14 +1,12 @@
-import { format_tooltip } from './utils.js'
-
 export const MODULE = {
     ID: "token-action-hud-swade"
 }
 
 export const ATTRIBUTE_ID = {
-    'SWADE.AttrAgi': 'agility', 
-    'SWADE.AttrSma': "smarts", 
-    'SWADE.AttrSpr': "spirit", 
-    'SWADE.AttrStr': "strengh",
+    'SWADE.AttrAgi': 'agility',
+    'SWADE.AttrSma': "smarts",
+    'SWADE.AttrSpr': "spirit",
+    'SWADE.AttrStr': "strengh", // Typo here: "strengh" should be "strength"
     'SWADE.AttrVig': "vigor"
 }
 
@@ -18,212 +16,127 @@ export const SYSDIR = 'systems/swade/'
 export const ICONSDIR = SYSDIR + 'assets/icons/'
 
 
-export const MAIN_ACTIONS = []
-export const FREE_ACTIONS = []
-
-export function init_help_buttons(delimiter) {
-    MAIN_ACTIONS.length = 0;
-    FREE_ACTIONS.length = 0;
-
-    MAIN_ACTIONS.push({
-        id:'attack',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.attack.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.attack.description'
-        )),
+export const MAIN_ACTIONS = [
+    {
+        id: "Attack",
+        name: "tokenActionHud.swade.actions.attack.name",
+        tooltip: "tokenActionHud.swade.actions.attack.description",
         img: "icons/skills/melee/strike-sword-steel-yellow.webp",
-        encodedValue: ['main_action', "attack"].join(delimiter)
-        //info2: { text: "You can attack an enemy with a melee or ranged weapon." }
-    })
-    MAIN_ACTIONS.push({
-        id:'Multi-Action',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.multi-action.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.multi-action.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Multi-Action",
+        name: "tokenActionHud.swade.actions.multi-action.name",
+        tooltip: "tokenActionHud.swade.actions.multi-action.description",
         img: "icons/skills/melee/strikes-sword-scimitar.webp",
-        encodedValue: ['main_action', "Multi-Action"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Wild-Attack',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.wild-attack.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.wild-attack.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Wild-Attack",
+        name: "tokenActionHud.swade.actions.wild-attack.name",
+        tooltip: "tokenActionHud.swade.actions.wild-attack.description",
         img: "icons/skills/melee/sword-twirl-orange.webp",
-        encodedValue: ['main_action', "Wild-Attack"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Desperate-Attack',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.desperate-attack.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.desperate-attack.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Desperate-Attack",
+        name: "tokenActionHud.swade.actions.desperate-attack.name",
+        tooltip: "tokenActionHud.swade.actions.desperate-attack.description",
         img: "icons/skills/melee/maneuver-greatsword-yellow.webp",
-        encodedValue: ['main_action', "Desperate-Attack"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Called-Shot',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.called-shot.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.called-shot.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Called-Shot",
+        name: "tokenActionHud.swade.actions.called-shot.name",
+        tooltip: "tokenActionHud.swade.actions.called-shot.description",
         img: "icons/skills/ranged/target-bullseye-arrow-blue.webp",
-        encodedValue: ['main_action', "Called-Shot"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Aim',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.aim.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.aim.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Aim",
+        name: "tokenActionHud.swade.actions.aim.name",
+        tooltip: "tokenActionHud.swade.actions.aim.description",
         img: "icons/skills/ranged/person-archery-bow-attack-orange.webp",
-        encodedValue: ['main_action', "Aim"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Push',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.push.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.push.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Push",
+        name: "tokenActionHud.swade.actions.push.name",
+        tooltip: "tokenActionHud.swade.actions.push.description",
         img: "icons/skills/movement/arrow-upward-blue.webp",
-        encodedValue: ['main_action', "Push"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Grapple',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.grapple.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.grapple.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Grapple",
+        name: "tokenActionHud.swade.actions.grapple.name",
+        tooltip: "tokenActionHud.swade.actions.grapple.description",
         img: "icons/skills/social/intimidation-impressing.webp",
-        encodedValue: ['main_action', "Grapple"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Defend',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.defend.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.defend.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Defend",
+        name: "tokenActionHud.swade.actions.defend.name",
+        tooltip: "tokenActionHud.swade.actions.defend.description",
         img: "icons/skills/melee/shield-block-gray-orange.webp",
-        encodedValue: ['main_action', "Defend"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Support',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.support.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.support.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Support",
+        name: "tokenActionHud.swade.actions.support.name",
+        tooltip: "tokenActionHud.swade.actions.support.description",
         img: "icons/skills/social/diplomacy-handshake-gray.webp",
-        encodedValue: ['main_action', "Support"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Test',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.test.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.test.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Test",
+        name: "tokenActionHud.swade.actions.test.name",
+        tooltip: "tokenActionHud.swade.actions.test.description",
         img: "icons/skills/social/thumbsup-approval-like.webp",
-        encodedValue: ['main_action', "Test"].join(delimiter)
-    })
-    MAIN_ACTIONS.push({
-        id:'Reload',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.reload.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.reload.description'
-        )),
+        encodedValue: ""
+    },
+    {
+        id: "Reload",
+        name: "tokenActionHud.swade.actions.reload.name",
+        tooltip: "tokenActionHud.swade.actions.reload.description",
         img: "icons/weapons/ammunition/bullets-cartridge-shell-gray.webp",
-        encodedValue: ['main_action', "Reload"].join(delimiter)
-    })
-
-    FREE_ACTIONS.push({
-        id:'move',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.move.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.move.description'
-        )),
-        img: "icons/skills/movement/arrow-upward-yellow.webp",
-        encodedValue: ['main_action', "move"].join(delimiter)
-    })
-    FREE_ACTIONS.push({
-        id:'Run',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.run.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.run.description'
-        )),
-        img: 'icons/skills/movement/figure-running-gray.webp',
-        encodedValue: ['main_action', 'Run'].join(delimiter)
-    })
-    FREE_ACTIONS.push({
-        id:'Speak',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.speak.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.speak.description'
-        )),
-        img: 'icons/skills/trades/music-singing-voice-blue.webp',
-        encodedValue: ['main_action', 'Speak'].join(delimiter)
-    })
-    FREE_ACTIONS.push({
-        id:'Go-Prone',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.go-prone.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.go-prone.description'
-        )),
-        img: 'icons/magic/control/silhouette-fall-slip-prone.webp',
-        encodedValue: ['main_action', 'Go-Prone'].join(delimiter)
-    })
-    FREE_ACTIONS.push({
-        id:'Drop',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.drop.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.drop.description'
-        )),
-        img: 'icons/magic/movement/chevrons-down-yellow.webp',
-        encodedValue: ['main_action', 'Drop'].join(delimiter)
-    })
-    FREE_ACTIONS.push({
-        id:'Not-Sure',
-        name: game.i18n.localize(
-            'tokenActionHud.swade.actions.not-sure.name'
-        ),
-        tooltip: format_tooltip(game.i18n.localize(
-            'tokenActionHud.swade.actions.not-sure.description'
-        )),
-        img: 'icons/magic/symbols/question-stone-yellow.webp',
-        encodedValue: ['main_action', 'Not-Sure'].join(delimiter)
-    })
-}
+        encodedValue: ""
+    }
+]
+export const FREE_ACTIONS = [{
+    id: "Move",
+    name: "tokenActionHud.swade.actions.move.name",
+    tooltip: "tokenActionHud.swade.actions.move.description",
+    img: "icons/skills/movement/arrow-upward-yellow.webp",
+    encodedValue: ""
+},{
+    id: "Run",
+    name: "tokenActionHud.swade.actions.run.name",
+    tooltip: "tokenActionHud.swade.actions.run.description",
+    img: "icons/skills/movement/figure-running-gray.webp",
+    encodedValue: ""
+},{
+    id: "Speak",
+    name: "tokenActionHud.swade.actions.speak.name",
+    tooltip: "tokenActionHud.swade.actions.speak.description",
+    img: "icons/skills/trades/music-singing-voice-blue.webp",
+    encodedValue: ""
+},{
+    id: "Go-Prone",
+    name: "tokenActionHud.swade.actions.go-prone.name",
+    tooltip: "tokenActionHud.swade.actions.go-prone.description",
+    img: "icons/magic/control/silhouette-fall-slip-prone.webp",
+    encodedValue: ""
+},{
+    id: "Drop",
+    name: "tokenActionHud.swade.actions.drop.name",
+    tooltip: "tokenActionHud.swade.actions.drop.description",
+    img: "icons/magic/movement/chevrons-down-yellow.webp",
+    encodedValue: ""
+},{
+    id: "Not-Sure",
+    name: "tokenActionHud.swade.actions.not-sure.name",
+    tooltip: "tokenActionHud.swade.actions.not-sure.description",
+    img: "icons/magic/symbols/question-stone-yellow.webp",
+    encodedValue: ""
+}]
 

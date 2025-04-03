@@ -1,5 +1,5 @@
-import { ATTRIBUTE_ID, ICONSDIR, IMG_DICE, init_help_buttons, MAIN_ACTIONS, FREE_ACTIONS } from './constants.js'
-import { Utils, format_tooltip } from './utils.js'
+import { ATTRIBUTE_ID, ICONSDIR, IMG_DICE, MAIN_ACTIONS, FREE_ACTIONS } from './constants.js'
+import { Utils, format_tooltip, init_help_buttons } from './utils.js'
 export let SavageActionHandler = null
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
@@ -56,7 +56,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         cssClass: effect.disabled ? "toggle" : "togle active",
                         tooltip: format_tooltip(effect.name),
                         encodedValue: ['ae', effect.id,effect.disabled,item.id].join(this.delimiter),
-                        info2: { text: item.type+": "+item.name }
+                        info1: { text: item.type+": "+item.name }
                     }], parent);
                 })
             })
@@ -94,9 +94,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         }
         _powerpoints(parent) {
             if((this.actor.items.filter(i => i.type === 'power')).length == 0) return;
-           
             let groups = Object.entries(this.actor.system.powerPoints)
-
             const powers = this.actor.items.filter((power) => power.type === "power")
             groups.forEach(group => {
                 let arcane = group[0]
@@ -135,8 +133,6 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.PP')),
                         encodedValue: ['powerPoints', encodevalue].join(this.delimiter)
                     })
-                    
-
                     this.addActions(actions, newg);
                 }
             })
@@ -255,6 +251,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         img: IMG_DICE + 'd' + img + '.svg',
                         tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Running')),
                         encodedValue: ['runningDie', 'runningDie'].join(this.delimiter),
+                        info1: { text: `d${img}` }
                     };
                     let child = {id: 'derivedstats', type: 'system'}
                     this.addActions([action],child)
@@ -268,6 +265,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         img: img,
                         tooltip: format_tooltip(coreModule.api.Utils.i18n('SWADE.Attributes')),
                         encodedValue: [macroType, key].join(this.delimiter),
+                        info1: { text: SavageActionHandler._buildDieString(data.die) }
                     })
                 }
             })
