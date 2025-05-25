@@ -82,8 +82,8 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                 shields: { id: 'shield', name: coreModule.api.Utils.i18n('SWADE.Shields'), type: 'system' },
                 armors_ae: { id: 'armors_ae', name: "Active Effects", type: 'system' },
                 weaponsfavorite: { id: 'weaponsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess')+"-"+coreModule.api.Utils.i18n('SWADE.Weapons'), type: 'system' },
-                actions: { id: 'actions', name: coreModule.api.Utils.i18n('SWADE.Actions'), type: 'system' },
-                actionsfavorite: { id: 'actionsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess')+"-"+coreModule.api.Utils.i18n('SWADE.Actions'), type: 'system' },
+                actions: { id: 'actions', name: coreModule.api.Utils.i18n('SWADE.Actions.Name'), type: 'system' },
+                actionsfavorite: { id: 'actionsfavorite', name: coreModule.api.Utils.i18n('SWADE.QuickAccess')+"-"+coreModule.api.Utils.i18n('SWADE.Actions.Name'), type: 'system' },
                 wounds: { id: 'wounds', name: "Wounds", type: 'system' },
                 fatigue: { id: 'fatigue', name: "Fatigue", type: 'system' },
                 benny: { id: 'benny', name: coreModule.api.Utils.i18n('SWADE.Rolls.Benny'), type: 'system' },
@@ -130,7 +130,7 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     {
                         nestId: 'actions',
                         id: 'actions',
-                        name: coreModule.api.Utils.i18n('SWADE.Actions'),
+                        name: coreModule.api.Utils.i18n('SWADE.Actions.Name'),
                         groups: [
                             { ...groups.actionsfavorite, nestId: 'actions_actionsfavorite' },
                             { ...groups.actions, nestId: 'actions_actions' }
