@@ -53,12 +53,12 @@ jobs:
           git config --global user.email "github-actions@github.com"
 
           git tag $TAG_NAME
-          git push https://x-access-token:${{ secrets.REPO_SEC }}@github.com/${{ github.repository }}.git $TAG_NAME
+          git push https://x-access-token:${{ secrets.GLOBAL_REPO_KEY }}@github.com/${{ github.repository }}.git $TAG_NAME
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          token: ${{ secrets.REPO_SEC }}
+          token: ${{ secrets.GLOBAL_REPO_KEY }}
           tag_name: ${{ env.TAG_NAME }}
           body: ${{ env.RELEASE_BODY }}
           draft: false
