@@ -5,60 +5,80 @@ on:
     types:
       - closed
 
+permissions:
+  contents: write
+
 jobs:
   create-tag-and-release:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Validate PR Title Format
         id: validate_title
+        shell: bash
         run: |
           PR_TITLE="${{ github.event.pull_request.title }}"
+
           echo "Pull Request Title: $PR_TITLE"
 
-          # Regular expression for versioning: vX.Y.Z or vX.Y.Z-suffix
+          # Valid formats:
+          # v1.0.0
+          # v1.0.0-beta
+          # v1.0.0-test
+          # v1.0.0-rc1
           if [[ ! "$PR_TITLE" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-beta|-test|-rc[0-9]*)?$ ]]; then
-            echo "❌ ERROR: PR title must follow the format vX.Y.Z or vX.Y.Z-{beta,test,rc} (e.g., v1.0.0, v2.3.0-beta)"
+            echo "❌ ERROR: Invalid PR title format."
+            echo "Expected: vX.Y.Z or vX.Y.Z-{beta,test,rcN}"
             exit 1
           fi
 
           echo "✅ PR title format is valid."
+
           echo "TAG_NAME=$PR_TITLE" >> $GITHUB_ENV
 
       - name: Check if it is a Pre-release
-        id: check_prerelease
+        shell: bash
         run: |
           if [[ "$TAG_NAME" =~ -beta|-test|-rc[0-9]* ]]; then
-            echo "🔹 Detected pre-release version: $TAG_NAME"
             echo "IS_PRERELEASE=true" >> $GITHUB_ENV
+            echo "🔹 Pre-release detected"
           else
-            echo "✅ This is a stable release: $TAG_NAME"
             echo "IS_PRERELEASE=false" >> $GITHUB_ENV
+            echo "✅ Stable release detected"
           fi
 
       - name: Extract PR Description
-        id: pr_info
+        shell: bash
         run: |
           DESCRIPTION="${{ github.event.pull_request.body }}"
-          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
-          echo "$DESCRIPTION" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+
+          {
+            echo "RELEASE_BODY<<EOF"
+            echo "$DESCRIPTION"
+            echo "EOF"
+          } >> $GITHUB_ENV
 
       - name: Create Git Tag
+        shell: bash
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-          git tag $TAG_NAME
-          git push https://x-access-token:${{ secrets.GLOBAL_REPO_KEY }}@github.com/${{ github.repository }}.git $TAG_NAME
+          git tag "$TAG_NAME"
+
+          git push origin "$TAG_NAME"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{ secrets.GLOBAL_REPO_KEY }}
           tag_name: ${{ env.TAG_NAME }}
           body: ${{ env.RELEASE_BODY }}
           draft: false
