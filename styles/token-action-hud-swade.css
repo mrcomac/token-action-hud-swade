@@ -28,3 +28,7 @@
 		1px 1px 1px rgba(52, 52, 52, 1),
 		1px 1px 1px rgba(52, 52, 52, 1);
 }
+
+#token-action-hud-core-settings > section {
+	overflow-y: auto !important;
+}
