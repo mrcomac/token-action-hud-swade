@@ -155,11 +155,10 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         /** @private */
         async _toggleStatus(event, actionId) {
             if(event != "effects") {
-                const existsOnActor = this.token.actor.statuses.has(actionId.toLowerCase())
-                const data = game.swade.util.getStatusEffectDataById(actionId.toLowerCase());
-                data["flags.core.statusId"] = actionId.toLowerCase();
-                await this.token.toggleEffect(data, { active: !existsOnActor });
-                
+                const statusId = actionId.toLowerCase();
+                const existsOnActor = this.token.actor.statuses.has(statusId);
+                await this.token.actor.toggleActiveEffect(statusId, { active: !existsOnActor });
+
             } else {
                 let effect = this.token.actor.effects.filter(el => el.id === actionId)
                 if(effect.length == 0) {

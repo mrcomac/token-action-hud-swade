@@ -141,7 +141,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             let items = []
             let items_favorities = []
 
-            let item_list = this.actor.items.filter(i => i.type === itemtype)
+            let item_list = this.actor.items.filter(i => i.type === itemtype && i.system.equipStatus !== 0)
             item_list.forEach(el => {
                 let element = {
                     id: el.id,
@@ -155,7 +155,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 } else if (el.system.die) {
                     element.info1 = { text: SavageActionHandler._buildDieString(el.system.die) }
                 } else if (el.type == 'consumable') {
-                    element.info1 = { text: el.system.charges.value + "/" + el.system.charges.max }
+                    element.info1 = { text: (el.system.charges?.charges?.[0]?.value ?? 0) + "/" + (el.system.charges?.charges?.[0]?.max ?? 0) }
                 }
                 if (el.system.favorite == true) {
                     items_favorities.push(element)
@@ -177,7 +177,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 let items = []
                 let items_favorities = []
                 let item_cat = { id: itemType, type: 'system' }
-                let item_list = this.actor.items.filter(i => i.type === itemType)
+                let item_list = this.actor.items.filter(i => i.type === itemType && i.system.equipStatus !== 0)
                 item_list.forEach(el => {
                     let element = {
                         id: el.id,
