@@ -141,7 +141,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             let items = []
             let items_favorities = []
 
-            let item_list = this.actor.items.filter(i => i.type === itemtype)
+            let item_list = this.actor.items.filter(i => i.type === itemtype && i.system.equipStatus !== 0)
             item_list.forEach(el => {
                 let element = {
                     id: el.id,
@@ -177,7 +177,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 let items = []
                 let items_favorities = []
                 let item_cat = { id: itemType, type: 'system' }
-                let item_list = this.actor.items.filter(i => i.type === itemType)
+                let item_list = this.actor.items.filter(i => i.type === itemType && i.system.equipStatus !== 0)
                 item_list.forEach(el => {
                     let element = {
                         id: el.id,
