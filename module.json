@@ -2,11 +2,10 @@
   "id": "token-action-hud-swade",
   "title": "Token Action HUD SWADE",
   "description": "Provide support for the savage worlds game system with Token Action HUD Core",
-  "version": "placeholder",
+  "version": "PLACEHOLDER",
   "compatibility": {
     "minimum": "11",
-    "verified": "13",
-    "maximum": ""
+    "verified": "14"
   },
   "authors": [
     {
@@ -26,7 +25,9 @@
     {
       "type": "setup",
       "url": "https://savageuniverse.com/assets/img/SW_LOGO_FP.webp",
-      "thumbnail": "https://savageuniverse.com/assets/img/SW_LOGO_FP.webp"
+      "thumbnail": "https://savageuniverse.com/assets/img/SW_LOGO_FP.webp",
+      "loop": false,
+      "flags": {}
     }
   ],
   "relationships": {
@@ -42,43 +43,50 @@
         "id": "token-action-hud-core",
         "type": "module",
         "compatibility": {
-          "minimum": "2.0.3",
-          "verified": "2.0.3"
+          "minimum": "2.1",
+          "verified": "2.1"
         }
       }
     ]
   },
   "esmodules": [
-    "./dist/token-action-hud-swade.min.js"
+    "dist/token-action-hud-swade.min.js"
   ],
   "styles": [
-    "styles/token-action-hud-swade.css"
+    {
+      "src": "styles/token-action-hud-swade.css"
+    }
   ],
   "languages": [
     {
-        "lang": "en",
-        "name": "English",
-        "path": "languages/en.json"
+      "lang": "en",
+      "name": "English",
+      "path": "languages/en.json",
+      "flags": {}
     },
     {
       "lang": "pt-BR",
       "name": "Portugues",
-      "path": "languages/pt-BR.json"
+      "path": "languages/pt-BR.json",
+      "flags": {}
     },
     {
       "lang": "it",
       "name": "Italiano",
-      "path": "languages/it.json"
+      "path": "languages/it.json",
+      "flags": {}
     },
     {
       "lang": "fr",
       "name": "Français",
-      "path": "languages/fr.json"
+      "path": "languages/fr.json",
+      "flags": {}
     }
   ],
   "url": "https://github.com/mrcomac/token-action-hud-swade",
-  "manifest": "https://github.com/mrcomac/token-action-hud-swade/releases/latest/download/module.json",
-  "download": "placeholder",
+  "manifest": "PLACEHOLDER",
+  "download": "PLACEHOLDER",
   "license": "LICENSE",
-  "readme": "README.md"
+  "readme": "README.md",
+  "flags": {}
 }

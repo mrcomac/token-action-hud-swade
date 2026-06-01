@@ -95,7 +95,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
         _powerpoints(parent) {
             if((this.actor.items.filter(i => i.type === 'power')).length == 0) return;
             let groups = Object.entries(this.actor.system.powerPoints)
-            const powers = this.actor.items.filter((power) => power.type === "power")
+            const powers = this.actor.items.filter((power) => power.type === "power" || power.type === "swade-supers-companion.superPower")
             groups.forEach(group => {
                 let arcane = group[0]
                 if(group[0] === 'general') arcane = ''
