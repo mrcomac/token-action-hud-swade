@@ -1,0 +1,158 @@
+name: Build & Release
+
+# Runs when a pull request is merged into main.
+# The PR title is the release version, e.g. v1.2.3 (or v1.2.3-beta / -test / -rcN).
+# It validates the title, builds the bundle, creates a tag + GitHub Release with
+# the packaged module, and publishes the version to the FoundryVTT package API.
+#
+# Reuse in another Foundry package: adjust the two vars below.
+#   IS_SYSTEM     -> "true" for a game system (system.json), "false" for a module (module.json)
+#   PACKAGE_ITEMS -> space-separated files/dirs to bundle (the manifest + LICENSE are always added)
+# Also confirm the build steps (Node setup / npm) match the project, or remove them
+# if the package has no build step.
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+permissions:
+  contents: write
+
+env:
+  IS_SYSTEM: 'false'
+  PACKAGE_ITEMS: 'assets/ styles/ dist/ languages/'
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resolve manifest and zip filenames
+        run: |
+          if [ "$IS_SYSTEM" = "true" ]; then
+            echo "MANIFEST=system.json" >> "$GITHUB_ENV"
+            echo "PACKAGE_ZIP=system.zip" >> "$GITHUB_ENV"
+          else
+            echo "MANIFEST=module.json" >> "$GITHUB_ENV"
+            echo "PACKAGE_ZIP=module.zip" >> "$GITHUB_ENV"
+          fi
+
+      - name: Parse and validate version from PR title
+        id: version
+        run: |
+          TAG="${{ github.event.pull_request.title }}"
+          echo "PR title: $TAG"
+
+          # Accept vX.Y.Z, optionally with -beta / -test / -rc[N]
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-beta|-test|-rc[0-9]*)?$ ]]; then
+            echo "::error::PR title must be vX.Y.Z or vX.Y.Z-{beta,test,rcN} (e.g. v1.0.0, v2.3.0-beta). Got: $TAG"
+            exit 1
+          fi
+
+          if [[ "$TAG" =~ -(beta|test|rc[0-9]*)$ ]]; then
+            PRERELEASE=true
+          else
+            PRERELEASE=false
+          fi
+
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          echo "prerelease=$PRERELEASE" >> "$GITHUB_OUTPUT"
+          echo "Validated $TAG (version ${TAG#v}, prerelease=$PRERELEASE)"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Build bundle
+        run: npm run build
+
+      - name: Stamp manifest with version and release URLs
+        run: |
+          REPO="${{ github.repository }}"
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
+          tmp="$(mktemp)"
+          jq \
+            --arg version "$VERSION" \
+            --arg url "https://github.com/$REPO" \
+            --arg manifest "https://github.com/$REPO/releases/latest/download/$MANIFEST" \
+            --arg download "https://github.com/$REPO/releases/download/$TAG/$PACKAGE_ZIP" \
+            '.version = $version | .url = $url | .manifest = $manifest | .download = $download' \
+            "$MANIFEST" > "$tmp" && mv "$tmp" "$MANIFEST"
+          echo "Stamped $MANIFEST:"
+          jq '{id, version, url, manifest, download}' "$MANIFEST"
+
+      - name: Package release zip
+        run: zip -r "./$PACKAGE_ZIP" "$MANIFEST" LICENSE $PACKAGE_ITEMS
+
+      - name: Create tag and GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          body: ${{ github.event.pull_request.body }}
+          prerelease: ${{ steps.version.outputs.prerelease }}
+          draft: false
+          target_commitish: ${{ github.event.pull_request.merge_commit_sha }}
+          files: |
+            ${{ env.MANIFEST }}
+            ${{ env.PACKAGE_ZIP }}
+
+      - name: Publish version to FoundryVTT
+        env:
+          FOUNDRY_TOKEN: ${{ secrets.FOUNDRYVTT_RELEASE_TOKEN }}
+        run: |
+          REPO="${{ github.repository }}"
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
+
+          ID=$(jq -r '.id' "$MANIFEST")
+          MIN=$(jq -r '.compatibility.minimum // ""' "$MANIFEST")
+          VERIFIED=$(jq -r '.compatibility.verified // ""' "$MANIFEST")
+          MAX=$(jq -r '.compatibility.maximum // ""' "$MANIFEST")
+
+          # FoundryVTT requires the submitted manifest to point at this SPECIFIC
+          # release, not the moving "latest" alias (the latter is only for the
+          # auto-update manifest field embedded inside the manifest itself).
+          payload=$(jq -n \
+            --arg id "$ID" \
+            --arg version "$VERSION" \
+            --arg manifest "https://github.com/$REPO/releases/download/$TAG/$MANIFEST" \
+            --arg notes "https://github.com/$REPO/releases/tag/$TAG" \
+            --arg min "$MIN" \
+            --arg verified "$VERIFIED" \
+            --arg max "$MAX" \
+            '{
+              id: $id,
+              "dry-run": false,
+              release: {
+                version: $version,
+                manifest: $manifest,
+                notes: $notes,
+                compatibility: { minimum: $min, verified: $verified, maximum: $max }
+              }
+            }')
+
+          echo "Submitting to FoundryVTT:"
+          echo "$payload" | jq '.'
+
+          http_code=$(curl -sS -o response.json -w '%{http_code}' \
+            -X POST "https://foundryvtt.com/_api/packages/release_version/" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: $FOUNDRY_TOKEN" \
+            -d "$payload")
+
+          echo "HTTP $http_code"
+          cat response.json
+          if [[ "$http_code" -lt 200 || "$http_code" -ge 300 ]]; then
+            echo "::error::FoundryVTT release failed (HTTP $http_code)"
+            exit 1
+          fi
