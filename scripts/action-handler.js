@@ -223,6 +223,8 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             const operators = system.operators ?? []
             let actions = []
 
+            console.warn("Vehicle operators:", operators)
+
             if(operators.length === 0) {
                 actions.push({
                     id: 'nooperator',
@@ -248,6 +250,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                     info2: { text: operator.name }
                 })
             })
+            console.warn("Vehicle maneuver actions:", actions)
             this.addActions(actions, parent)
         }
         _getAttributes(parent) {

@@ -104,9 +104,9 @@ Hooks.on('tokenActionHudCoreApiReady', async (coreModule) => {
                     {
                         nestId: 'vehicle',
                         id: 'vehicle',
-                        name: coreModule.api.Utils.i18n('SWADE.TYPES.Actor.vehicle'),
+                        name: coreModule.api.Utils.i18n('TYPES.Actor.vehicle'),
                         groups: [
-                            { ...groups.vehicledriver, nestId: 'vehicledriver' },
+                            { ...groups.vehicledriver, nestId: 'vehicle_vehicledriver' },
                         ]
                     },
                     {
