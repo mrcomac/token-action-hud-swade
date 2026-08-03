@@ -40,14 +40,7 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 case "powers":
                     const tokenType = this.actor.type;
                     if(tokenType == "vehicle" && macroType === "weapons") {
-                        const driver = await fromUuid(this.actor.system.driver.id)
-                        const weaponToCopy = this.actor.items.filter(item => item.id === actionId)[0]
-                        let itemData = duplicate(weaponToCopy);
-                        const item = await driver.createEmbeddedDocuments("Item", [itemData]);
-                        await this._rollItem(event, item[0].id, driver)
-                        // allow BR2 to roll from the card
-                        setTimeout(function(){ driver.deleteEmbeddedDocuments("Item", [item[0].id]); }, 60000);
-                        
+                        await this._rollVehicleWeapon(event, actionId);
                     } else {
                         this._rollItem(event, actionId,this.token.actor);
                     }
@@ -83,10 +76,17 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                         this._wounds(macroType,actor,actionId)
                     }
                 break;
-                case "maneuver":
-                    const driver = await fromUuid(this.actor.system.driver.id)
-                    this._rollSkill(event, actionId, driver);
+                case "maneuver": {
+                    if (actionId === "NONE") break;
+                    const operator = await fromUuid(actionId);
+                    if (!operator) break;
+                    const skillId = payload[2];
+                    // No matching driving skill: let the system roll it unskilled, with
+                    // the handling/wound penalties it applies itself.
+                    if (!skillId) await this.actor.system.rollManeuverCheck(operator);
+                    else this._rollSkill(event, skillId, operator);
                     break;
+                }
                 case "main_action":
                 case "free_action":
                     const all_actions = MAIN_ACTIONS.concat(FREE_ACTIONS)
@@ -144,6 +144,29 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
                 
             }
             actor.update(update)
+        }
+
+        /**
+         * A vehicle weapon is fired by the crew member it is assigned to, falling back to
+         * the operator. The item is copied onto that actor so BR2 can roll from the
+         * resulting chat card, then removed again.
+         * @private
+         */
+        async _rollVehicleWeapon(event, actionId) {
+            const vehicle = this.actor;
+            const weapon = vehicle.items.get(actionId);
+            if (!weapon) return;
+
+            const gunner = vehicle.system.getCrewMemberForWeapon?.(weapon) ?? vehicle.system.operator ?? null;
+            // Nobody aboard (or no permission to touch them): roll straight off the vehicle.
+            if (!gunner || !gunner.isOwner) return this._rollItem(event, actionId, vehicle);
+
+            const itemData = weapon.toObject();
+            delete itemData._id;
+            const [copy] = await gunner.createEmbeddedDocuments("Item", [itemData]);
+            await this._rollItem(event, copy.id, gunner);
+            // allow BR2 to roll from the card
+            setTimeout(() => { gunner.deleteEmbeddedDocuments("Item", [copy.id]); }, 60000);
         }
 
         /** @private */

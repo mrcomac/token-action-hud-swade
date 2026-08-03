@@ -3,7 +3,7 @@ import { MAIN_ACTIONS, FREE_ACTIONS, MODULE } from './constants.js'
 export let Utils = null
 
 export function format_tooltip(original_str) {
-    return original_str.replace(/@\w+\[.*?\]\{(.*?)\}/g, '$1');
+    return (original_str ?? "").replace(/@\w+\[.*?\]\{(.*?)\}/g, '$1');
 }
 
 Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
