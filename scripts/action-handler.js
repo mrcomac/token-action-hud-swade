@@ -1,4 +1,4 @@
-import { ATTRIBUTE_ID, ICONSDIR, IMG_DICE, MAIN_ACTIONS, FREE_ACTIONS } from './constants.js'
+import { ATTRIBUTE_ID, ICONSDIR, IMG_DICE, MAIN_ACTIONS, FREE_ACTIONS, MANEUVER_ICON } from './constants.js'
 import { Utils, format_tooltip, init_help_buttons } from './utils.js'
 export let SavageActionHandler = null
 
@@ -26,18 +26,19 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
 
                 this._getUtilities({ id: "utility", type: 'system'})
                 this._powerpoints({ id: 'powerpoints', type: 'system' })
-                let default_statuses = []
-                CONFIG.statusEffects.forEach(item => {
-                    default_statuses.push(item.id)
-                    })
-                this._effects(default_statuses)
+                this._effects(SavageActionHandler._defaultStatuses())
                 this._helpme()
             } else if (actor.type == "vehicle") {
-                ["weapons"].forEach(element => {
-                    this._getSkills({ id: 'skills', type: 'system' });
+                this._getVehicleCrew({ id: 'vehicledriver', type: 'system' });
+                ["weapons", 'consumables', 'gears', 'actions'].forEach(element => {
                     this._getItems({ id: element, type: 'system' }, element.slice(0, -1))
                 })
+                this._getWounds()
+                this._effects(SavageActionHandler._defaultStatuses())
             }
+        }
+        static _defaultStatuses() {
+            return CONFIG.statusEffects.map(item => item.id)
         }
         _helpme() {
             this.addActions(MAIN_ACTIONS, { id: 'mainactions', type: 'system' })
@@ -198,40 +199,56 @@ Hooks.once('tokenActionHudCoreApiReady', async (coreModule) => {
             })  
         }
         async _getSkills(parent) {
-            const tokenType = this.actor.type;
-
-            if(tokenType == "vehicle") {
-                const driver = await fromUuid(this.actor.system.driver.id)
-                let skill = driver.items.filter(item => item.name === this.actor.system.driver.skill)
-                if(skill.length === 0) {
-                    skill = driver.items.filter(item=>item.type==="skill" && item.system.die.sides === 4 && item.system.die.modifier === -2)[0]
-                } else {
-                    skill = skill[0]
+            let skills = this.actor.items.filter(i => i.type === "skill")
+            let actions = skills.map(element => {
+                return {
+                    id: element.id,
+                    name: element.name,
+                    img: element.img,
+                    tooltip: format_tooltip(element.system.description),
+                    encodedValue: ['skills', element.id].join(this.delimiter),
+                    info1: { text: SavageActionHandler._buildDieString(element.system.die) }
                 }
-                this.addActions([{
-                    id: this.actor.id,
+
+            });
+            this.addActions(actions, parent)
+        }
+        /**
+         * The maneuver check for every operator sitting in the vehicle's crew list.
+         * A vehicle without an operator is valid in SWADE, so this has to degrade
+         * gracefully instead of assuming there is a driver actor.
+         */
+        _getVehicleCrew(parent) {
+            const system = this.actor.system
+            const operators = system.operators ?? []
+            let actions = []
+
+            if(operators.length === 0) {
+                actions.push({
+                    id: 'nooperator',
                     name: coreModule.api.Utils.i18n("SWADE.ManCheck"),
-                    img: "systems/swade/assets/icons/skills/steering-wheel.svg",
-                    tooltip: format_tooltip(""),
-                    encodedValue: ['maneuver', skill.id].join(this.delimiter),
-                    info1: { text: SavageActionHandler._buildDieString(skill.system.die) }
-                }], parent)
-
-            } else {
-                let skills = this.actor.items.filter(i => i.type === "skill")
-                let actions = skills.map(element => {
-                    return {
-                        id: element.id,
-                        name: element.name,
-                        img: element.img,
-                        tooltip: format_tooltip(element.system.description),
-                        encodedValue: ['skills', element.id].join(this.delimiter),
-                        info1: { text: SavageActionHandler._buildDieString(element.system.die) }
-                    }
-
-                });
-                this.addActions(actions, parent)
+                    img: MANEUVER_ICON,
+                    cssClass: "disabled",
+                    tooltip: format_tooltip(coreModule.api.Utils.i18n("SWADE.OperatorIdHint")),
+                    encodedValue: ['maneuver', 'NONE'].join(this.delimiter)
+                })
             }
+
+            operators.forEach(operator => {
+                const skills = operator.itemTypes?.skill ?? []
+                const skill = skills.find(s => s.name === system.driver.skill)
+                    ?? skills.find(s => s.name === system.driver.skillAlternative)
+                actions.push({
+                    id: 'maneuver' + operator.id,
+                    name: coreModule.api.Utils.i18n("SWADE.ManCheck"),
+                    img: MANEUVER_ICON,
+                    tooltip: format_tooltip(operator.name),
+                    encodedValue: ['maneuver', operator.uuid, skill?.id ?? ''].join(this.delimiter),
+                    info1: { text: skill ? SavageActionHandler._buildDieString(skill.system.die) : 'd4-2' },
+                    info2: { text: operator.name }
+                })
+            })
+            this.addActions(actions, parent)
         }
         _getAttributes(parent) {
             const macroType = "attributes";

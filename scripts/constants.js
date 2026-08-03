@@ -14,6 +14,7 @@ export const MODULEDIR = 'modules/' + MODULE.ID + '/'
 export const IMG_DICE = MODULEDIR + 'assets/'
 export const SYSDIR = 'systems/swade/'
 export const ICONSDIR = SYSDIR + 'assets/icons/'
+export const MANEUVER_ICON = ICONSDIR + 'skills/steering-wheel.svg'
 
 
 export const MAIN_ACTIONS = [
